@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
     public Tile tilePrefab;
-    public uint maxRow;
-    public uint maxColumn;
-    private Grid gridData;
-    public Dictionary<uint[], TileData> mapTiles = new Dictionary<uint[], TileData>();
+    public int maxRow;
+    public int maxColumn;
+    private GridLayoutGroup gridData;
+    public Dictionary<int[], TileData> mapTiles = new Dictionary<int[], TileData>();
 
     private void Awake()
     {
-        gridData = GetComponent<Grid>();
+        InitializeGridData();
+        
     }
 
     private void Start()
@@ -22,24 +24,52 @@ public class GridManager : MonoBehaviour
 
     private void GenerateGrid()
     {
-        Vector3 startPosition = new Vector3(maxColumn * (gridData.cellSize.x + gridData.cellGap.x) / 2, 0, maxRow * (gridData.cellSize.y + gridData.cellGap.y) / 2);
-        float x = startPosition.x;
-        float y = startPosition.y;
-
-        for (uint row = maxRow; row > 0; row--)
+        for (int row = 0; row < maxRow; row++)
         {
-            for(uint column = 0; column < maxColumn; column++)
+            for (int column = 0; column < maxColumn; column++)
             {
-                var tile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
-                tile.transform.localScale = gridData.cellSize;
-                x -= 1 * (gridData.cellSize.x + gridData.cellGap.x);
+                Tile tile = Instantiate(tilePrefab, transform);
                 tile.Initialize(this, row, column);
                 tile.name = "Tile - (" + row.ToString() + " - " + column.ToString() + ")";
-                uint[] newKeyMap = { row, column };
+                int[] newKeyMap = { row, column };
                 mapTiles[newKeyMap] = tile.data;
             }
-            x = startPosition.x;
-            y -= 1 * (gridData.cellSize.y + gridData.cellGap.y);
         }
     }
+
+    private void InitializeGridData()
+    {
+        gridData = GetComponent<GridLayoutGroup>();
+        gridData.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        gridData.startAxis = GridLayoutGroup.Axis.Horizontal;
+        gridData.childAlignment = TextAnchor.MiddleCenter;
+        gridData.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridData.constraintCount = maxColumn;
+    }
 }
+
+
+
+///OLD BALLETTA'S METHOD
+//private void GenerateGrid()
+//{
+//    Vector3 startPosition = new Vector3(maxColumn * (gridData.cellSize.x + gridData.cellGap.x) / 2, maxRow * (gridData.cellSize.y + gridData.cellGap.y) / 2, 0);
+//    float x = startPosition.x;
+//    float y = startPosition.y;
+
+//    for (uint row = maxRow; row > 0; row--)
+//    {
+//        for(uint column = 0; column < maxColumn; column++)
+//        {
+//            var tile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
+//            tile.transform.localScale = gridData.cellSize;
+//            x -= 1 * (gridData.cellSize.x + gridData.cellGap.x);
+//            tile.Initialize(this, row, column);
+//            tile.name = "Tile - (" + row.ToString() + " - " + column.ToString() + ")";
+//            uint[] newKeyMap = { row, column };
+//            mapTiles[newKeyMap] = tile.data;
+//        }
+//        x = startPosition.x;
+//        y -= 1 * (gridData.cellSize.y + gridData.cellGap.y);
+//    }
+//}

@@ -5,11 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public class TileData
 {
-    public uint row;
-    public uint column;
+    public int row;
+    public int column;
     public GridManager gm;
 
-    public TileData(GridManager gridManager, uint newRow, uint newColumn)
+    public TileData(GridManager gridManager, int newRow, int newColumn)
     {
         row = newRow;
         column = newColumn;
