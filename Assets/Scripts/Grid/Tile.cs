@@ -5,11 +5,11 @@ using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
-    public TileData data;
+    public TileData Data;
 
     public void Initialize(GridManager gridM, int rowInit, int columnInit)
     {
-        data = new TileData(gridM, rowInit, columnInit);
+        Data = new TileData(gridM, rowInit, columnInit);
     }
 
     public void OnPointerClick(PointerEventData eventData)
