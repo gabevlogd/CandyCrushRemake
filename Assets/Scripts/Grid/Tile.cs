@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+public class Tile : MonoBehaviour, IPointerClickHandler
 {
     public TileData Data;
 
@@ -14,16 +14,25 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPoin
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("OnPointerClick");
+        //Debug.Log("OnPointerClickTile");
+        StoreSelectedTile(eventData);
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("OnPointerDown");
-    }
 
-    public void OnPointerUp(PointerEventData eventData)
+    private void StoreSelectedTile(PointerEventData eventData)
     {
-        Debug.Log("OnPointerUp");
+        if (!GridManager.PressedTiles[0])
+        {
+            eventData.pointerClick.TryGetComponent(out Tile pressedTile);
+            GridManager.PressedTiles[0] = pressedTile;
+            return;
+        }
+        if (!GridManager.PressedTiles[1])
+        {
+            eventData.pointerClick.TryGetComponent(out Tile pressedTile);
+            GridManager.PressedTiles[1] = pressedTile;
+        }
+
+        //Debug.Log("move complete");
     }
 }

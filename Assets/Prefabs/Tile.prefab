@@ -113,4 +113,3 @@ MonoBehaviour:
     Row: 0
     Column: 0
     GridManager: {fileID: 0}
-    CandyPrefab: {fileID: 3570779741632838798, guid: e4e9d41e398d9b240912c0b5ffaf07fe, type: 3}
