@@ -18,19 +18,24 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         StoreSelectedTile(eventData);
     }
 
-
+    /// <summary>
+    /// Stores the tiles clicked by the player
+    /// </summary>
+    /// <param name="eventData"></param>
     private void StoreSelectedTile(PointerEventData eventData)
     {
         if (!GridManager.PressedTiles[0])
         {
             eventData.pointerClick.TryGetComponent(out Tile pressedTile);
             GridManager.PressedTiles[0] = pressedTile;
+            pressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", true); //visual feedback of the selection
             return;
         }
         if (!GridManager.PressedTiles[1])
         {
             eventData.pointerClick.TryGetComponent(out Tile pressedTile);
             GridManager.PressedTiles[1] = pressedTile;
+            pressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", true); //visual feedback of the selection
         }
 
         //Debug.Log("move complete");

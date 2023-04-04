@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 193532668143072452}
   - component: {fileID: 4377883914278452014}
   - component: {fileID: 3570779741632838798}
+  - component: {fileID: 8368760413877671436}
   m_Layer: 5
   m_Name: Candy
   m_TagString: Untagged
@@ -95,5 +96,24 @@ MonoBehaviour:
   CandySprites:
   - {fileID: 21300000, guid: f1eb97aa6cfaccb46b472e1f4333313b, type: 3}
   - {fileID: 21300000, guid: 73e0865a8836f604a9adcfc0fd919f94, type: 3}
+  - {fileID: 21300000, guid: 0b2ffd308a96fd640bf35f9c56b57a15, type: 3}
   - {fileID: 21300000, guid: cd0cca194a81a2043a643c45deb47934, type: 3}
-  - {fileID: 21300000, guid: f8660f52ceace1648b6f056ea7c8aec6, type: 3}
+--- !u!95 &8368760413877671436
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8400370261321160991}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 147f67223d0caf24e9e4a3f7dbeb93b4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

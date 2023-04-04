@@ -62,6 +62,10 @@ public class WaitMoveState : StateBase<GameState>
 
     private void WaitForNewMove()
     {
+        //stops visual feedbacks of selection
+        GridManager.PressedTiles[0].GetComponentInChildren<Candy>().Animator.SetBool("Selected", false); 
+        GridManager.PressedTiles[1].GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
+
         GridManager.PressedTiles[0] = null;
         GridManager.PressedTiles[1] = null;
     }
