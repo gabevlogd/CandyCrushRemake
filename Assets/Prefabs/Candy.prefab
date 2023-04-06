@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 5429319936156500972}
   - component: {fileID: 193532668143072452}
   - component: {fileID: 4377883914278452014}
-  - component: {fileID: 3570779741632838798}
   - component: {fileID: 8368760413877671436}
+  - component: {fileID: 3570779741632838798}
+  - component: {fileID: -360967477144825158}
   m_Layer: 5
   m_Name: Candy
   m_TagString: Untagged
@@ -77,27 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3570779741632838798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8400370261321160991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fdc4d74cfc8b24cbc9ea2fc2c155d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Data:
-    Vscore: 0
-    Hscore: 0
-    candyColor: 0
-  CandySprites:
-  - {fileID: 21300000, guid: f1eb97aa6cfaccb46b472e1f4333313b, type: 3}
-  - {fileID: 21300000, guid: 73e0865a8836f604a9adcfc0fd919f94, type: 3}
-  - {fileID: 21300000, guid: 0b2ffd308a96fd640bf35f9c56b57a15, type: 3}
-  - {fileID: 21300000, guid: cd0cca194a81a2043a643c45deb47934, type: 3}
 --- !u!95 &8368760413877671436
 Animator:
   serializedVersion: 3
@@ -117,3 +97,37 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3570779741632838798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8400370261321160991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fdc4d74cfc8b24cbc9ea2fc2c155d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Vscore: 0
+    Hscore: 0
+    candyColor: 0
+  Animator: {fileID: 0}
+  CandySprites:
+  - {fileID: 21300000, guid: f1eb97aa6cfaccb46b472e1f4333313b, type: 3}
+  - {fileID: 21300000, guid: 73e0865a8836f604a9adcfc0fd919f94, type: 3}
+  - {fileID: 21300000, guid: 0b2ffd308a96fd640bf35f9c56b57a15, type: 3}
+  - {fileID: 21300000, guid: cd0cca194a81a2043a643c45deb47934, type: 3}
+--- !u!114 &-360967477144825158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8400370261321160991}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b6a8f1e383a8a4ab87ee77a47c914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

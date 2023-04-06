@@ -35,7 +35,6 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         {
             eventData.pointerClick.TryGetComponent(out Tile pressedTile);
             GridManager.PressedTiles[1] = pressedTile;
-            pressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", true); //visual feedback of the selection
         }
 
         //Debug.Log("move complete");

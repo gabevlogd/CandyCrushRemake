@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class ComputeCombosState : StateBase<GameState>
 {
-    private CombosCalculator combosCalculator;
 
-    public ComputeCombosState(CombosCalculator calculator)
+    public ComputeCombosState()
     {
         StateID = GameState.ComputeCombos;
-        combosCalculator = calculator;
     }
 
     public override void OnEnter()
     {
         base.OnEnter();
-        combosCalculator.gameObject.SetActive(true);
+        GridManager.PressedTiles[0].GetComponentInChildren<ScoreCalculator>().enabled = true;
+        GridManager.PressedTiles[1].GetComponentInChildren<ScoreCalculator>().enabled = true;
     }
 
     public override void OnUpdate()
@@ -26,6 +25,5 @@ public class ComputeCombosState : StateBase<GameState>
     public override void OnExit()
     {
         base.OnExit();
-        combosCalculator.gameObject.SetActive(false);
     }
 }

@@ -6,10 +6,12 @@ using UnityEngine.UI;
 [System.Serializable]
 public class CandyData 
 {
-    [HideInInspector]
+    //[HideInInspector]
     public int Vscore, Hscore;
     [HideInInspector]
     public CandyColor candyColor;
+    //[HideInInspector]
+    //public Candy TriggeredBy; //DEVO ANCORA CAPIRE SE SERVE
     
 
     

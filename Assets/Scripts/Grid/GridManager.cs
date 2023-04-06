@@ -6,8 +6,11 @@ using UnityEngine.EventSystems;
 
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance;
+
     public Tile TilePrefab;
     public Candy CandyPrefab;
+
     public int MaxRow;
     public int MaxColumn;
     public Tile[,] Tiles;
@@ -18,6 +21,9 @@ public class GridManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+
         PressedTiles = new Tile[2];
         Tiles = new Tile[MaxRow, MaxColumn];
         InitializeGridData();

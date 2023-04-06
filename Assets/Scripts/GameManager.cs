@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public StateBase<GameState> CurrentState { get => m_currentState; set => m_currentState = value; }
     public Dictionary<GameState, StateBase<GameState>> GameStates;
-    public CombosCalculator CombosCalculator;
 
     private StateBase<GameState> m_currentState;
 
@@ -23,7 +22,7 @@ public class GameManager : MonoBehaviour
     {
         GameStates = new Dictionary<GameState, StateBase<GameState>>();
         GameStates.Add(GameState.WaitMove, new WaitMoveState());
-        GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(CombosCalculator));
+        GameStates.Add(GameState.ComputeCombos, new ComputeCombosState());
 
 
         m_currentState = GameStates[GameState.WaitMove];

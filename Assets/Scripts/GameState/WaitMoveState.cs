@@ -29,8 +29,8 @@ public class WaitMoveState : StateBase<GameState>
                 Candy candy1 = GridManager.PressedTiles[1].gameObject.GetComponentInChildren<Candy>();
 
                 SwapCandies(candy0, candy1);
-                WaitForNewMove();
-                //GameManager.Instance.ChangeState(GameState.ComputeCombos); //go to the next game state
+                //WaitForNewMove();
+                GameManager.Instance.ChangeState(GameState.ComputeCombos); //go to the next game state
             }
         }
     }
@@ -60,15 +60,13 @@ public class WaitMoveState : StateBase<GameState>
         }
 
         WaitForNewMove();
+        //stops visual feedbacks of selection
+        lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
         return false;
     }
 
     private void WaitForNewMove()
     {
-        //stops visual feedbacks of selection
-        GridManager.PressedTiles[0]?.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false); 
-        GridManager.PressedTiles[1]?.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
-
         GridManager.PressedTiles[0] = null;
         GridManager.PressedTiles[1] = null;
     }
@@ -77,5 +75,8 @@ public class WaitMoveState : StateBase<GameState>
     {
         candy0.transform.SetParent(GridManager.PressedTiles[1].transform, false);
         candy1.transform.SetParent(GridManager.PressedTiles[0].transform, false);
+
+        //stops visual feedbacks of selection
+        candy0.Animator.SetBool("Selected", false);
     }
 }
