@@ -13,12 +13,20 @@ public class ScoreCalculator : MonoBehaviour
         m_horizontalTwin = new List<Candy>();
         m_verticalTwin = new List<Candy>();
         m_candy = GetComponent<Candy>();
+
         CalculateScore();
     }
 
     private void OnDisable()
     {
-        //add something to some delegate
+        CheckScore();
+    }
+
+    /// <summary>
+    /// checks if the candy forms a combo and if so, adds it to the combo destroyers
+    /// </summary>
+    private void CheckScore()
+    {
         if (m_candy.Data.Vscore >= 2 || m_candy.Data.Hscore >= 2)
         {
             switch (m_candy.Data.candyColor)
@@ -39,6 +47,9 @@ public class ScoreCalculator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calculates vertical and horizontal score of the current candy
+    /// </summary>
     private void CalculateScore()
     {
         int row = m_candy.GetComponentInParent<Tile>().Data.Row;
@@ -68,42 +79,67 @@ public class ScoreCalculator : MonoBehaviour
         this.enabled = false;
     }
 
+    /// <summary>
+    /// if the candy above has the same color of the current one increment the vertical score
+    /// </summary>
+    /// <param name="row">row of the current candy</param>
+    /// <param name="column">column of the current candy</param>
     private void CheckNeighbourUp(int row, int column)
     {
         if (row == GridManager.Instance.MaxRow - 1) return;
 
         Candy neighbour = GridManager.Instance.Tiles[row + 1, column].GetComponentInChildren<Candy>();
 
-        UpdateScores(neighbour, true);
+        if (neighbour != null) UpdateScores(neighbour, true);
     }
 
+    /// <summary>
+    /// if the candy below has the same color of the current one increment the vertical score
+    /// </summary>
+    /// <param name="row">row of the current candy</param>
+    /// <param name="column">column of the current candy</param>
     private void CheckNeighbourDown(int row, int column)
     {
         if (row == 0) return;
 
         Candy neighbour = GridManager.Instance.Tiles[row - 1, column].GetComponentInChildren<Candy>();
 
-        UpdateScores(neighbour, true);
+        if (neighbour != null) UpdateScores(neighbour, true);
     }
 
+    /// <summary>
+    /// if the candy on the right has the same color of the current one increment the horizontal score
+    /// </summary>
+    /// <param name="row">row of the current candy</param>
+    /// <param name="column">column of the current candy</param>
     private void CheckNeighbourRight(int row, int column)
     {
         if (column == GridManager.Instance.MaxColumn - 1) return;
 
         Candy neighbour = GridManager.Instance.Tiles[row, column + 1].GetComponentInChildren<Candy>();
 
-        UpdateScores(neighbour, false);
+        if (neighbour != null) UpdateScores(neighbour, false);
     }
 
+    /// <summary>
+    /// if the candy on the left has the same color of the current one increment the horizontal score
+    /// </summary>
+    /// <param name="row">row of the current candy</param>
+    /// <param name="column">column of the current candy</param>
     private void CheckNeighbourLeft(int row, int column)
     {
         if (column == 0) return;
 
         Candy neighbour = GridManager.Instance.Tiles[row, column - 1].GetComponentInChildren<Candy>();
 
-        UpdateScores(neighbour, false);
+        if (neighbour != null) UpdateScores(neighbour, false);
     }
 
+    /// <summary>
+    /// Update the vertical or horizontal score of the current candy
+    /// </summary>
+    /// <param name="neighbour"></param>
+    /// <param name="vertical">if true updates vertical score else horizontal</param>
     private void UpdateScores(Candy neighbour, bool vertical)
     {
         if (neighbour.Data.candyColor == m_candy.Data.candyColor /*&& m_candy.Data.TriggeredBy != neighbour*/)
@@ -111,7 +147,7 @@ public class ScoreCalculator : MonoBehaviour
             if (vertical)
             {
                 m_candy.Data.Vscore++;
-                m_verticalTwin.Add(neighbour);
+                m_verticalTwin.Add(neighbour); 
             }
             else
             {
@@ -119,10 +155,13 @@ public class ScoreCalculator : MonoBehaviour
                 m_horizontalTwin.Add(neighbour);
             }
             //neighbour.Data.TriggeredBy = m_candy; //DEVO ANCORA CAPIRE SE SERVE QUESTO CONTROLLO
-            neighbour.GetComponent<ScoreCalculator>().enabled = true;
+            neighbour.GetComponent<ScoreCalculator>().enabled = true; //enable the score calculator of the neighbour (chain reaction)
         }
     }
 
+    /// <summary>
+    /// Destroys the current candy and its twins
+    /// </summary>
     public void DestoryCandy()
     {
         if (m_candy.Data.Hscore >= 2)

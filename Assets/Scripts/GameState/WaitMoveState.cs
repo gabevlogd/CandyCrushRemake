@@ -71,6 +71,11 @@ public class WaitMoveState : StateBase<GameState>
         GridManager.PressedTiles[1] = null;
     }
 
+    /// <summary>
+    /// swaps the position of two candies
+    /// </summary>
+    /// <param name="candy0"></param>
+    /// <param name="candy1"></param>
     private void SwapCandies(Candy candy0, Candy candy1)
     {
         candy0.transform.SetParent(GridManager.PressedTiles[1].transform, false);

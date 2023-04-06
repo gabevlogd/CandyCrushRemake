@@ -14,17 +14,37 @@ public class CombosFinder : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(pippo());
+        Debug.Log("CombosFinder enabled");
+        DestroyCombos();
+        this.enabled = false;
     }
 
-    private IEnumerator pippo()
+    private void OnDisable()
+    {
+        ResetDestroyer();
+        GameManager.Instance.ChangeState(GameState.WaitMove); //ONLY FOR DEBUG, REAL VALUE IS GAMESTATE.REFILLGRID
+    }
+
+    private void DestroyCombos()
     {
         RedCandiesDestroyer?.Invoke();
-        yield return new WaitForSeconds(1);
+        //if (RedCandiesDestroyer != null) yield return new WaitForSeconds(1);
+
         BlueCandiesDestroyer?.Invoke();
-        yield return new WaitForSeconds(1);
+        //if (BlueCandiesDestroyer != null) yield return new WaitForSeconds(1);
+
         GreenCandiesDestroyer?.Invoke();
-        yield return new WaitForSeconds(1);
+        //if (GreenCandiesDestroyer != null) yield return new WaitForSeconds(1);
+
         YellowCandiesDestroyer?.Invoke();
+        //if (YellowCandiesDestroyer != null) yield return new WaitForSeconds(1);
+    }
+
+    private void ResetDestroyer()
+    {
+        RedCandiesDestroyer = null;
+        BlueCandiesDestroyer = null;
+        GreenCandiesDestroyer = null;
+        YellowCandiesDestroyer = null;
     }
 }

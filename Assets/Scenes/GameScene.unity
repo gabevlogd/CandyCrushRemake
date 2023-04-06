@@ -636,6 +636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ad689b6886d0645915fa2344d17aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CombosFinder: {fileID: 1709530030}
 --- !u!4 &1941320162
 Transform:
   m_ObjectHideFlags: 0

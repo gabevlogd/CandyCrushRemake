@@ -12,9 +12,9 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
     #endregion
-    [HideInInspector]
     public StateBase<GameState> CurrentState { get => m_currentState; set => m_currentState = value; }
     public Dictionary<GameState, StateBase<GameState>> GameStates;
+    public CombosFinder CombosFinder;
 
     private StateBase<GameState> m_currentState;
 
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     {
         GameStates = new Dictionary<GameState, StateBase<GameState>>();
         GameStates.Add(GameState.WaitMove, new WaitMoveState());
-        GameStates.Add(GameState.ComputeCombos, new ComputeCombosState());
+        GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(CombosFinder));
 
 
         m_currentState = GameStates[GameState.WaitMove];
