@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         //Debug.Log("OnPointerClickTile");
-        StoreSelectedTile(eventData);
+        if (GameManager.Instance.CurrentState.StateID == GameState.WaitMove) StoreSelectedTile(eventData);
     }
 
     /// <summary>

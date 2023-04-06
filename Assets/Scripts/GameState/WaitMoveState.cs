@@ -13,11 +13,14 @@ public class WaitMoveState : StateBase<GameState>
     public override void OnEnter()
     {
         base.OnEnter();
+        WaitForNewMove();
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
+
+        //if PressedTiles[1] != null means that player has chosen both candies to swap
         if (GridManager.PressedTiles[1])
         {
             if (LegalMove())
@@ -26,8 +29,8 @@ public class WaitMoveState : StateBase<GameState>
                 Candy candy1 = GridManager.PressedTiles[1].gameObject.GetComponentInChildren<Candy>();
 
                 SwapCandies(candy0, candy1);
-
                 WaitForNewMove();
+                //GameManager.Instance.ChangeState(GameState.ComputeCombos); //go to the next game state
             }
         }
     }
@@ -63,8 +66,8 @@ public class WaitMoveState : StateBase<GameState>
     private void WaitForNewMove()
     {
         //stops visual feedbacks of selection
-        GridManager.PressedTiles[0].GetComponentInChildren<Candy>().Animator.SetBool("Selected", false); 
-        GridManager.PressedTiles[1].GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
+        GridManager.PressedTiles[0]?.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false); 
+        GridManager.PressedTiles[1]?.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
 
         GridManager.PressedTiles[0] = null;
         GridManager.PressedTiles[1] = null;

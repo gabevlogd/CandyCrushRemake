@@ -12,36 +12,40 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
     #endregion
-    public Dictionary<GameState, StateBase<GameState>> GameStates;
     [HideInInspector]
-    public StateBase<GameState> CurrentState;
+    public StateBase<GameState> CurrentState { get => m_currentState; set => m_currentState = value; }
+    public Dictionary<GameState, StateBase<GameState>> GameStates;
+    public CombosCalculator CombosCalculator;
+
+    private StateBase<GameState> m_currentState;
 
     private void Start()
     {
         GameStates = new Dictionary<GameState, StateBase<GameState>>();
         GameStates.Add(GameState.WaitMove, new WaitMoveState());
+        GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(CombosCalculator));
 
 
-        CurrentState = GameStates[GameState.WaitMove];
-        CurrentState.OnEnter();
+        m_currentState = GameStates[GameState.WaitMove];
+        m_currentState.OnEnter();
     }
 
     private void Update()
     {
-        CurrentState.OnUpdate();
+        m_currentState.OnUpdate();
     }
 
     public void ChangeState(GameState state)
     {
-        CurrentState.OnExit();
-        CurrentState = GameStates[state];
-        CurrentState.OnEnter();
+        m_currentState.OnExit();
+        m_currentState = GameStates[state];
+        m_currentState.OnEnter();
     }
 }
 
 public enum GameState
 {
     WaitMove,
-    ProcessMove,
+    ComputeCombos,
     RefillGrid
 }
