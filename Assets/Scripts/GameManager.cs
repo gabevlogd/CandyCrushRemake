@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public StateBase<GameState> CurrentState { get => m_currentState; set => m_currentState = value; }
     public Dictionary<GameState, StateBase<GameState>> GameStates;
     public CombosFinder CombosFinder;
+    public RefillManager RefillManager;
 
     private StateBase<GameState> m_currentState;
 
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
         GameStates = new Dictionary<GameState, StateBase<GameState>>();
         GameStates.Add(GameState.WaitMove, new WaitMoveState());
         GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(CombosFinder));
-        GameStates.Add(GameState.RefillGrid, new RefillGridState());
+        GameStates.Add(GameState.RefillGrid, new RefillGridState(RefillManager));
 
 
         m_currentState = GameStates[GameState.WaitMove];

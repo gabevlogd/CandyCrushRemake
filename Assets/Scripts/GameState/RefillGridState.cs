@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class RefillGridState : StateBase<GameState>
 {
-    public RefillGridState()
+    private RefillManager m_refillManager;
+
+    public RefillGridState(RefillManager refillManager)
     {
         StateID = GameState.RefillGrid;
+        m_refillManager = refillManager;
+
+        RefillManager.TilesToRefill = new List<Tile>[GridManager.Instance.MaxColumn];
+        for (int i = 0; i < GridManager.Instance.MaxColumn; i++) RefillManager.TilesToRefill[i] = new List<Tile>();
     }
 
     public override void OnEnter()
     {
         base.OnEnter();
+        m_refillManager.enabled = true;
     }
 
     public override void OnUpdate()

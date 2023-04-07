@@ -29,6 +29,8 @@ public class ScoreCalculator : MonoBehaviour
     {
         if (m_candy.Data.Vscore >= 2 || m_candy.Data.Hscore >= 2)
         {
+            UpdateRefillData();
+
             switch (m_candy.Data.candyColor)
             {
                 case CandyColor.red:
@@ -44,6 +46,30 @@ public class ScoreCalculator : MonoBehaviour
                     CombosFinder.YellowCandiesDestroyer += DestoryCandy;
                     break;
             }
+        }
+    }
+
+    /// <summary>
+    /// memorizes the tiles that will remain empty after the destruction of the combos
+    /// </summary>
+    private void UpdateRefillData()
+    {
+        int column = m_candy.GetComponentInParent<Tile>().Data.Column;
+
+        RefillManager.TilesToRefill[column].Add(m_candy.GetComponentInParent<Tile>());
+
+        if (m_verticalTwin.Count == 2)
+        {
+            if (m_verticalTwin[0].Data.Vscore == 1) RefillManager.TilesToRefill[column].Add(m_verticalTwin[0].GetComponentInParent<Tile>());
+            if (m_verticalTwin[1].Data.Vscore == 1) RefillManager.TilesToRefill[column].Add(m_verticalTwin[1].GetComponentInParent<Tile>());
+        }
+        else
+        {
+            int column0 = m_horizontalTwin[0].GetComponentInParent<Tile>().Data.Column;
+            int column1 = m_horizontalTwin[1].GetComponentInParent<Tile>().Data.Column;
+
+            if (m_horizontalTwin[0].Data.Hscore == 1) RefillManager.TilesToRefill[column0].Add(m_horizontalTwin[0].GetComponentInParent<Tile>());
+            if (m_horizontalTwin[1].Data.Hscore == 1) RefillManager.TilesToRefill[column1].Add(m_horizontalTwin[1].GetComponentInParent<Tile>());
         }
     }
 

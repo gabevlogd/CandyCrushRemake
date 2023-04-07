@@ -14,7 +14,7 @@ public class CombosFinder : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("CombosFinder enabled");
+        //Debug.Log("CombosFinder enabled");
         DestroyCombos();
         this.enabled = false;
     }
@@ -22,7 +22,16 @@ public class CombosFinder : MonoBehaviour
     private void OnDisable()
     {
         ResetDestroyer();
-        GameManager.Instance.ChangeState(GameState.WaitMove); //ONLY FOR DEBUG, REAL VALUE IS GAMESTATE.REFILLGRID
+
+        //ONLY FOR DEBUG, REAL VALUE IS GAMESTATE.REFILLGRID
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        GameState nextGameState = GameState.WaitMove;
+        for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        {
+            if (RefillManager.TilesToRefill[i].Count > 0) nextGameState = GameState.RefillGrid;
+        }
+        GameManager.Instance.ChangeState(nextGameState); 
+        ///////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     private void DestroyCombos()
