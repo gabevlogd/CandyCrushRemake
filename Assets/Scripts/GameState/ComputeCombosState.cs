@@ -18,7 +18,7 @@ public class ComputeCombosState : StateBase<GameState>
     {
         base.OnEnter();
         m_combosFinder.enabled = false;
-        m_computationTimer = 5f;
+        m_computationTimer = 2f;
         m_finderEnabled = false;
         GridManager.PressedTiles[0].GetComponentInChildren<ScoreCalculator>().enabled = true;
         GridManager.PressedTiles[1].GetComponentInChildren<ScoreCalculator>().enabled = true;

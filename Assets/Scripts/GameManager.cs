@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
         GameStates = new Dictionary<GameState, StateBase<GameState>>();
         GameStates.Add(GameState.WaitMove, new WaitMoveState());
         GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(CombosFinder));
+        GameStates.Add(GameState.RefillGrid, new RefillGridState());
 
 
         m_currentState = GameStates[GameState.WaitMove];
