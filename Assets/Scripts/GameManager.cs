@@ -13,11 +13,14 @@ public class GameManager : MonoBehaviour
     }
     #endregion
     public StateBase<GameState> CurrentState { get => m_currentState; set => m_currentState = value; }
+    public StateBase<GameState> PreviousState { get => m_previuosState; set => m_previuosState = value; }
+
     public Dictionary<GameState, StateBase<GameState>> GameStates;
     public CombosFinder CombosFinder;
     public RefillManager RefillManager;
 
     private StateBase<GameState> m_currentState;
+    private StateBase<GameState> m_previuosState;
 
     private void Start()
     {
@@ -38,6 +41,7 @@ public class GameManager : MonoBehaviour
 
     public void ChangeState(GameState state)
     {
+        m_previuosState = m_currentState;
         m_currentState.OnExit();
         m_currentState = GameStates[state];
         m_currentState.OnEnter();

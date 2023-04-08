@@ -20,8 +20,13 @@ public class ComputeCombosState : StateBase<GameState>
         m_combosFinder.enabled = false;
         m_computationTimer = 2f;
         m_finderEnabled = false;
-        GridManager.PressedTiles[0].GetComponentInChildren<ScoreCalculator>().enabled = true;
-        GridManager.PressedTiles[1].GetComponentInChildren<ScoreCalculator>().enabled = true;
+
+        if (GameManager.Instance.PreviousState.StateID == GameState.WaitMove)
+        {
+            GridManager.PressedTiles[0].GetComponentInChildren<ScoreCalculator>().enabled = true;
+            GridManager.PressedTiles[1].GetComponentInChildren<ScoreCalculator>().enabled = true;
+        }
+        
     }
 
     public override void OnUpdate()

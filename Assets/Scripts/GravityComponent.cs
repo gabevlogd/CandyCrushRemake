@@ -19,7 +19,6 @@ public class GravityComponent : MonoBehaviour
     {
         if (Mathf.Abs(transform.position.y - m_newParent.transform.position.y) <= 0.1f)
         {
-            //Debug.Log("DIODIODIODIO");
             m_rigidbody.gravityScale = 0;
             m_rigidbody.velocity = Vector2.zero;
             m_rigidbody.bodyType = RigidbodyType2D.Kinematic;

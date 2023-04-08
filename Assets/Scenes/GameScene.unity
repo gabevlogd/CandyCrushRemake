@@ -253,6 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d999ad3b452cf4ca86ad13686d3d66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CandyPrefab: {fileID: 3570779741632838798, guid: e4e9d41e398d9b240912c0b5ffaf07fe, type: 3}
 --- !u!4 &253512167
 Transform:
   m_ObjectHideFlags: 0
@@ -469,8 +470,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TilePrefab: {fileID: 3573225711181290980, guid: ff9334a23cc7d2742aebd084c4f5ec0b, type: 3}
   CandyPrefab: {fileID: 3570779741632838798, guid: e4e9d41e398d9b240912c0b5ffaf07fe, type: 3}
-  MaxRow: 10
-  MaxColumn: 10
+  MaxRow: 8
+  MaxColumn: 8
 --- !u!114 &1634963482
 MonoBehaviour:
   m_ObjectHideFlags: 0
