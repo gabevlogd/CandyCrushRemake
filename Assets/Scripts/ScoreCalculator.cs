@@ -20,6 +20,7 @@ public class ScoreCalculator : MonoBehaviour
     private void OnDisable()
     {
         CheckScore();
+        m_candy.Data.TriggeredBy = null;
     }
 
     /// <summary>
@@ -56,20 +57,41 @@ public class ScoreCalculator : MonoBehaviour
     {
         int column = m_candy.GetComponentInParent<Tile>().Data.Column;
 
-        RefillManager.TilesToRefill[column].Add(m_candy.GetComponentInParent<Tile>());
+        if (!m_candy.Data.AlreadyAdded)
+        {
+            m_candy.Data.AlreadyAdded = true;
+            RefillManager.TilesToRefill[column].Add(m_candy.GetComponentInParent<Tile>());
+        }
 
         if (m_verticalTwin.Count == 2)
         {
-            if (m_verticalTwin[0].Data.Vscore == 1) RefillManager.TilesToRefill[column].Add(m_verticalTwin[0].GetComponentInParent<Tile>());
-            if (m_verticalTwin[1].Data.Vscore == 1) RefillManager.TilesToRefill[column].Add(m_verticalTwin[1].GetComponentInParent<Tile>());
+            if (!m_verticalTwin[0].Data.AlreadyAdded)
+            {
+                m_verticalTwin[0].Data.AlreadyAdded = true;
+                RefillManager.TilesToRefill[column].Add(m_verticalTwin[0].GetComponentInParent<Tile>());
+            }
+
+            if (!m_verticalTwin[1].Data.AlreadyAdded)
+            {
+                m_verticalTwin[1].Data.AlreadyAdded = true;
+                RefillManager.TilesToRefill[column].Add(m_verticalTwin[1].GetComponentInParent<Tile>());
+            }
         }
         else
         {
             int column0 = m_horizontalTwin[0].GetComponentInParent<Tile>().Data.Column;
             int column1 = m_horizontalTwin[1].GetComponentInParent<Tile>().Data.Column;
 
-            if (m_horizontalTwin[0].Data.Hscore == 1) RefillManager.TilesToRefill[column0].Add(m_horizontalTwin[0].GetComponentInParent<Tile>());
-            if (m_horizontalTwin[1].Data.Hscore == 1) RefillManager.TilesToRefill[column1].Add(m_horizontalTwin[1].GetComponentInParent<Tile>());
+            if (!m_horizontalTwin[0].Data.AlreadyAdded)
+            {
+                m_horizontalTwin[0].Data.AlreadyAdded = true;
+                RefillManager.TilesToRefill[column0].Add(m_horizontalTwin[0].GetComponentInParent<Tile>());
+            }
+            if (!m_horizontalTwin[1].Data.AlreadyAdded)
+            {
+                m_horizontalTwin[1].Data.AlreadyAdded = true;
+                RefillManager.TilesToRefill[column1].Add(m_horizontalTwin[1].GetComponentInParent<Tile>());
+            }
         }
     }
 
@@ -180,8 +202,12 @@ public class ScoreCalculator : MonoBehaviour
                 m_candy.Data.Hscore++;
                 m_horizontalTwin.Add(neighbour);
             }
-            //neighbour.Data.TriggeredBy = m_candy; //DEVO ANCORA CAPIRE SE SERVE QUESTO CONTROLLO
-            neighbour.GetComponent<ScoreCalculator>().enabled = true; //enable the score calculator of the neighbour (chain reaction)
+            //DEVO ANCORA CAPIRE SE SERVE QUESTO CONTROLLO
+            if (m_candy.Data.TriggeredBy != neighbour)
+            {
+                neighbour.Data.TriggeredBy = m_candy;
+                neighbour.GetComponent<ScoreCalculator>().enabled = true; //enable the score calculator of the neighbour (chain reaction)
+            }
         }
     }
 
