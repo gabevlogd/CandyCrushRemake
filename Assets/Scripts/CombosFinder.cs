@@ -10,6 +10,7 @@ public class CombosFinder : MonoBehaviour
     public static CandiesDestroyer BlueCandiesDestroyer;
     public static CandiesDestroyer GreenCandiesDestroyer;
     public static CandiesDestroyer YellowCandiesDestroyer;
+    public static CandiesDestroyer PurpleCandiesDestroyer;
 
 
     private void OnEnable()
@@ -37,16 +38,14 @@ public class CombosFinder : MonoBehaviour
     private void DestroyCombos()
     {
         RedCandiesDestroyer?.Invoke();
-        //if (RedCandiesDestroyer != null) yield return new WaitForSeconds(1);
 
         BlueCandiesDestroyer?.Invoke();
-        //if (BlueCandiesDestroyer != null) yield return new WaitForSeconds(1);
 
         GreenCandiesDestroyer?.Invoke();
-        //if (GreenCandiesDestroyer != null) yield return new WaitForSeconds(1);
 
         YellowCandiesDestroyer?.Invoke();
-        //if (YellowCandiesDestroyer != null) yield return new WaitForSeconds(1);
+
+        PurpleCandiesDestroyer?.Invoke();
     }
 
     private void ResetDestroyer()
@@ -55,5 +54,6 @@ public class CombosFinder : MonoBehaviour
         BlueCandiesDestroyer = null;
         GreenCandiesDestroyer = null;
         YellowCandiesDestroyer = null;
+        PurpleCandiesDestroyer = null;
     }
 }

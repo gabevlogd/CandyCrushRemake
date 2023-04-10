@@ -33,6 +33,7 @@ public class ComputeCombosState : StateBase<GameState>
     {
         base.OnUpdate();
 
+        //NEED TO FIND A BETTER SOLUTION
         if (m_computationTimer > 0) m_computationTimer -= Time.deltaTime;
         else if (m_finderEnabled == false)
         {

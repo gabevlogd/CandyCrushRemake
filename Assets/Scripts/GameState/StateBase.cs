@@ -8,17 +8,17 @@ public class StateBase<T>
 
     public virtual void OnEnter()
     {
-        Debug.Log("OnEnter " + StateID);
+        //Debug.Log("OnEnter " + StateID);
 
     }
 
     public virtual void OnUpdate()
     {
-        Debug.Log("OnUpadte " + StateID);
+        //Debug.Log("OnUpadte " + StateID);
     }
 
     public virtual void OnExit()
     {
-        Debug.Log("OnExit " + StateID);
+       //Debug.Log("OnExit " + StateID);
     }
 }

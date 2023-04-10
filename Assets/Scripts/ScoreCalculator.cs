@@ -46,6 +46,9 @@ public class ScoreCalculator : MonoBehaviour
                 case CandyColor.yellow:
                     CombosFinder.YellowCandiesDestroyer += DestoryCandy;
                     break;
+                case CandyColor.purple:
+                    CombosFinder.PurpleCandiesDestroyer += DestoryCandy;
+                    break;
             }
         }
     }
@@ -190,7 +193,7 @@ public class ScoreCalculator : MonoBehaviour
     /// <param name="vertical">if true updates vertical score else horizontal</param>
     private void UpdateScores(Candy neighbour, bool vertical)
     {
-        if (neighbour.Data.candyColor == m_candy.Data.candyColor /*&& m_candy.Data.TriggeredBy != neighbour*/)
+        if (neighbour.Data.candyColor == m_candy.Data.candyColor)
         {
             if (vertical)
             {
@@ -202,8 +205,9 @@ public class ScoreCalculator : MonoBehaviour
                 m_candy.Data.Hscore++;
                 m_horizontalTwin.Add(neighbour);
             }
+
             //DEVO ANCORA CAPIRE SE SERVE QUESTO CONTROLLO
-            if (m_candy.Data.TriggeredBy != neighbour)
+            if (CandyData.ChainReactionOn && m_candy.Data.TriggeredBy != neighbour)
             {
                 neighbour.Data.TriggeredBy = m_candy;
                 neighbour.GetComponent<ScoreCalculator>().enabled = true; //enable the score calculator of the neighbour (chain reaction)
@@ -220,17 +224,17 @@ public class ScoreCalculator : MonoBehaviour
         {
             foreach(Candy candy in m_horizontalTwin)
             {
-                if (candy.Data.Hscore == 1) Destroy(candy.gameObject);
+                if (candy.Data.Hscore == 1 && candy != null) Destroy(candy.gameObject);
             }
         }
-        else
+        else if (m_candy.Data.Vscore >= 2)
         {
             foreach (Candy candy in m_verticalTwin)
             {
-                if (candy.Data.Vscore == 1) Destroy(candy.gameObject);
+                if (candy.Data.Vscore == 1 && candy != null) Destroy(candy.gameObject);
             }
         }
 
-        Destroy(gameObject);
+        if (m_candy != null) Destroy(m_candy.gameObject);
     }
 }

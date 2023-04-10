@@ -12,8 +12,8 @@ public class RefillManager : MonoBehaviour
 
     private void OnEnable()
     {
-        //TilesToRefill = new List<Tile>[GridManager.Instance.MaxColumn];
         m_lowestRows = new int[GridManager.Instance.MaxColumn];
+        CandiesToCheckAfterRefill = new List<Candy>();
         FindLowestTiles();
         StartCandiesFall();
         RefillEmptyTiles();
@@ -21,12 +21,32 @@ public class RefillManager : MonoBehaviour
 
     private void OnDisable()
     {
-        //foreach(Candy candy in CandiesToCheckAfterRefill)
-        //{
-        //    candy.GetComponent<ScoreCalculator>().enabled = true;
-        //}
-        TilesToRefill = new List<Tile>[GridManager.Instance.MaxColumn];
         for (int i = 0; i < GridManager.Instance.MaxColumn; i++) RefillManager.TilesToRefill[i] = new List<Tile>();
+
+        //foreach (Tile tile in GridManager.Instance.Tiles)
+        //{
+        //    Candy candy = tile.GetComponentInChildren<Candy>();
+        //    if (candy != null) candy.Data.ResetData();
+        //}
+
+        //CandyData.ChainReactionOn = false;
+
+        //foreach (Tile tile in GridManager.Instance.Tiles)
+        //{
+        //    Candy candy = tile.GetComponentInChildren<Candy>();
+        //    if (candy != null) candy.GetComponent<ScoreCalculator>().enabled = true;
+        //}
+
+
+        //foreach (Candy candy in CandiesToCheckAfterRefill)
+        //{
+        //    if (!candy.GetComponent<ScoreCalculator>().enabled) candy.GetComponent<ScoreCalculator>().enabled = true;
+        //}
+
+        CandiesToCheckAfterRefill = new List<Candy>();
+
+        GameManager.Instance.ChangeState(GameState.WaitMove);
+
     }
 
 
@@ -66,7 +86,7 @@ public class RefillManager : MonoBehaviour
                 candy.transform.SetParent(GridManager.Instance.Tiles[j - numberOfEmptyTiles, i].transform); //set new parent of candy (before the fall)
                 candy.GetComponent<GravityComponent>().enabled = true;
 
-                //CandiesToCheckAfterRefill.Add(candy);
+                CandiesToCheckAfterRefill.Add(candy);
             }
 
         }
@@ -83,21 +103,20 @@ public class RefillManager : MonoBehaviour
             for (int j = 0; j < TilesToRefill[i].Count; j++)
             {
                 Transform parent = GridManager.Instance.Tiles[rowToRefill++, i].transform;
-                StartCoroutine(SpawnNewCandy(parent));
+                SpawnNewCandy(parent);
             }
         }
 
         this.enabled = false;
     }
 
-    private IEnumerator SpawnNewCandy(Transform parent)
+    private void SpawnNewCandy(Transform parent)
     {
-        yield return new WaitForSeconds(1f);
         Candy candy = Instantiate(CandyPrefab, parent);
         CandyColor candyColor = (CandyColor)GridManager.RandomColor();
         candy.Initialize(0, 0, candyColor, candy.CandySprites[(int)candyColor]);
 
-        //CandiesToCheckAfterRefill.Add(candy);
+        CandiesToCheckAfterRefill.Add(candy);
     }
 
 }

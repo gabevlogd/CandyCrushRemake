@@ -128,7 +128,7 @@ public class GridManager : MonoBehaviour
     /// <returns>random integer between 0 and 3 inclusive</returns>
     public static int RandomColor()
     {
-        return Random.Range(0, 4);
+        return Random.Range(0, 5);
     }
 
     /// <summary>

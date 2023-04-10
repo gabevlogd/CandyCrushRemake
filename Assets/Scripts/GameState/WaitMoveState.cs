@@ -13,6 +13,7 @@ public class WaitMoveState : StateBase<GameState>
     public override void OnEnter()
     {
         base.OnEnter();
+        CandyData.ChainReactionOn = true;
         WaitForNewMove();
     }
 

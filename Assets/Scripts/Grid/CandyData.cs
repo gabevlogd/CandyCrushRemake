@@ -9,10 +9,12 @@ public class CandyData
     //[HideInInspector]
     public int Vscore, Hscore;
     public bool AlreadyAdded;
-    [HideInInspector]
+    //[HideInInspector]
     public CandyColor candyColor;
     [HideInInspector]
     public Candy TriggeredBy; //DEVO ANCORA CAPIRE SE SERVE
+
+    public static bool ChainReactionOn;
 
 
 
@@ -25,6 +27,14 @@ public class CandyData
         AlreadyAdded = false;
     }
 
+    public void ResetData()
+    {
+        Vscore = 0;
+        Hscore = 0;
+        AlreadyAdded = false;
+        TriggeredBy = null;
+    }
+
 }
 
 public enum CandyColor
@@ -32,5 +42,6 @@ public enum CandyColor
     red,
     blue,
     green,
-    yellow
+    yellow,
+    purple
 }
