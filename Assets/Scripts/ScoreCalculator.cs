@@ -21,6 +21,7 @@ public class ScoreCalculator : MonoBehaviour
     {
         CheckScore();
         m_candy.Data.TriggeredBy = null;
+        //if (GameManager.Instance.PreviousState.StateID != GameState.WaitMove) Debug.Log("Done");
     }
 
     /// <summary>
@@ -66,35 +67,40 @@ public class ScoreCalculator : MonoBehaviour
             RefillManager.TilesToRefill[column].Add(m_candy.GetComponentInParent<Tile>());
         }
 
-        if (m_verticalTwin.Count == 2)
+        if (m_candy.Data.Vscore == 2)
         {
-            if (!m_verticalTwin[0].Data.AlreadyAdded)
+            if (!m_verticalTwin[0].Data.AlreadyAdded && m_verticalTwin[0].Data.Vscore == 1)
             {
                 m_verticalTwin[0].Data.AlreadyAdded = true;
                 RefillManager.TilesToRefill[column].Add(m_verticalTwin[0].GetComponentInParent<Tile>());
             }
 
-            if (!m_verticalTwin[1].Data.AlreadyAdded)
+            if (!m_verticalTwin[1].Data.AlreadyAdded && m_verticalTwin[1].Data.Vscore == 1)
             {
                 m_verticalTwin[1].Data.AlreadyAdded = true;
                 RefillManager.TilesToRefill[column].Add(m_verticalTwin[1].GetComponentInParent<Tile>());
             }
+
+            return;
         }
-        else
+
+        if (m_candy.Data.Hscore == 2)
         {
             int column0 = m_horizontalTwin[0].GetComponentInParent<Tile>().Data.Column;
             int column1 = m_horizontalTwin[1].GetComponentInParent<Tile>().Data.Column;
 
-            if (!m_horizontalTwin[0].Data.AlreadyAdded)
+            if (!m_horizontalTwin[0].Data.AlreadyAdded && m_horizontalTwin[0].Data.Hscore == 1)
             {
                 m_horizontalTwin[0].Data.AlreadyAdded = true;
                 RefillManager.TilesToRefill[column0].Add(m_horizontalTwin[0].GetComponentInParent<Tile>());
             }
-            if (!m_horizontalTwin[1].Data.AlreadyAdded)
+            if (!m_horizontalTwin[1].Data.AlreadyAdded && m_horizontalTwin[1].Data.Hscore == 1)
             {
                 m_horizontalTwin[1].Data.AlreadyAdded = true;
                 RefillManager.TilesToRefill[column1].Add(m_horizontalTwin[1].GetComponentInParent<Tile>());
             }
+
+            return;
         }
     }
 
@@ -220,6 +226,8 @@ public class ScoreCalculator : MonoBehaviour
     /// </summary>
     public void DestoryCandy()
     {
+        //UpdateRefillData();
+
         if (m_candy.Data.Hscore >= 2)
         {
             foreach(Candy candy in m_horizontalTwin)

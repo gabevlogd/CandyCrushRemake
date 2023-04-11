@@ -5,7 +5,7 @@ using UnityEngine;
 public class RefillManager : MonoBehaviour
 {
     public static List<Tile>[] TilesToRefill;
-    public static List<Candy> CandiesToCheckAfterRefill;
+    //public static List<Candy> CandiesToCheckAfterRefill;
     public Candy CandyPrefab;
 
     private int[] m_lowestRows;
@@ -13,7 +13,7 @@ public class RefillManager : MonoBehaviour
     private void OnEnable()
     {
         m_lowestRows = new int[GridManager.Instance.MaxColumn];
-        CandiesToCheckAfterRefill = new List<Candy>();
+        //CandiesToCheckAfterRefill = new List<Candy>();
         FindLowestTiles();
         StartCandiesFall();
         RefillEmptyTiles();
@@ -43,7 +43,7 @@ public class RefillManager : MonoBehaviour
         //    if (!candy.GetComponent<ScoreCalculator>().enabled) candy.GetComponent<ScoreCalculator>().enabled = true;
         //}
 
-        CandiesToCheckAfterRefill = new List<Candy>();
+        //CandiesToCheckAfterRefill = new List<Candy>();
 
         GameManager.Instance.ChangeState(GameState.WaitMove);
 
@@ -86,7 +86,7 @@ public class RefillManager : MonoBehaviour
                 candy.transform.SetParent(GridManager.Instance.Tiles[j - numberOfEmptyTiles, i].transform); //set new parent of candy (before the fall)
                 candy.GetComponent<GravityComponent>().enabled = true;
 
-                CandiesToCheckAfterRefill.Add(candy);
+                //CandiesToCheckAfterRefill.Add(candy);
             }
 
         }
@@ -116,7 +116,7 @@ public class RefillManager : MonoBehaviour
         CandyColor candyColor = (CandyColor)GridManager.RandomColor();
         candy.Initialize(0, 0, candyColor, candy.CandySprites[(int)candyColor]);
 
-        CandiesToCheckAfterRefill.Add(candy);
+        //CandiesToCheckAfterRefill.Add(candy);
     }
 
 }

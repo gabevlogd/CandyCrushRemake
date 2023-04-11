@@ -33,6 +33,7 @@ public class CandyData
         Hscore = 0;
         AlreadyAdded = false;
         TriggeredBy = null;
+        ChainReactionOn = false;
     }
 
 }

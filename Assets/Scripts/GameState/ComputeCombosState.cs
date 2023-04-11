@@ -26,7 +26,6 @@ public class ComputeCombosState : StateBase<GameState>
             GridManager.PressedTiles[0].GetComponentInChildren<ScoreCalculator>().enabled = true;
             GridManager.PressedTiles[1].GetComponentInChildren<ScoreCalculator>().enabled = true;
         }
-        
     }
 
     public override void OnUpdate()
