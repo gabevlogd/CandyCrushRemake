@@ -31,7 +31,12 @@ public class Candy : MonoBehaviour
         m_image.enabled = true;
     }
 
-    
+    public void SelfDestruction()
+    {
+        Destroy(gameObject);
+    }
+
+
 
 
 

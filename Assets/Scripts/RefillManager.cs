@@ -5,7 +5,7 @@ using UnityEngine;
 public class RefillManager : MonoBehaviour
 {
     public static List<Tile>[] TilesToRefill;
-    //public static List<Candy> CandiesToCheckAfterRefill;
+
     public Candy CandyPrefab;
 
     private int[] m_lowestRows;
@@ -13,7 +13,7 @@ public class RefillManager : MonoBehaviour
     private void OnEnable()
     {
         m_lowestRows = new int[GridManager.Instance.MaxColumn];
-        //CandiesToCheckAfterRefill = new List<Candy>();
+
         FindLowestTiles();
         StartCandiesFall();
         RefillEmptyTiles();
@@ -23,11 +23,13 @@ public class RefillManager : MonoBehaviour
     {
         for (int i = 0; i < GridManager.Instance.MaxColumn; i++) RefillManager.TilesToRefill[i] = new List<Tile>();
 
-        //foreach (Tile tile in GridManager.Instance.Tiles)
-        //{
-        //    Candy candy = tile.GetComponentInChildren<Candy>();
-        //    if (candy != null) candy.Data.ResetData();
-        //}
+        foreach (Tile tile in GridManager.Instance.Tiles)
+        {
+            Candy candy = tile.GetComponentInChildren<Candy>();
+            if (candy != null) candy.Data.ResetData();
+        }
+
+        //PostRefillCombosManager.enabled = true;
 
         //CandyData.ChainReactionOn = false;
 
@@ -45,7 +47,7 @@ public class RefillManager : MonoBehaviour
 
         //CandiesToCheckAfterRefill = new List<Candy>();
 
-        GameManager.Instance.ChangeState(GameState.WaitMove);
+        //GameManager.Instance.ChangeState(GameState.WaitMove);
 
     }
 

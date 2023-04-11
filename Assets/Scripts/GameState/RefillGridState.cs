@@ -24,7 +24,7 @@ public class RefillGridState : StateBase<GameState>
     public override void OnUpdate()
     {
         base.OnUpdate();
-        //if (!m_refillManager.enabled) GameManager.Instance.ChangeState(GameState.ComputeCombos); //ONLY FOR DEBUG, NOT THE CORRECT NEXT STATE
+        if (!m_refillManager.enabled) GameManager.Instance.ChangeState(GameState.PostRefill);
     }
 
     public override void OnExit()

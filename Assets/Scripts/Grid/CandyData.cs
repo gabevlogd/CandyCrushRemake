@@ -6,15 +6,10 @@ using UnityEngine.UI;
 [System.Serializable]
 public class CandyData 
 {
-    //[HideInInspector]
     public int Vscore, Hscore;
     public bool AlreadyAdded;
-    //[HideInInspector]
     public CandyColor candyColor;
-    [HideInInspector]
     public Candy TriggeredBy; //DEVO ANCORA CAPIRE SE SERVE
-
-    public static bool ChainReactionOn;
 
 
 
@@ -33,7 +28,6 @@ public class CandyData
         Hscore = 0;
         AlreadyAdded = false;
         TriggeredBy = null;
-        ChainReactionOn = false;
     }
 
 }

@@ -36,19 +36,19 @@ public class ScoreCalculator : MonoBehaviour
             switch (m_candy.Data.candyColor)
             {
                 case CandyColor.red:
-                    CombosFinder.RedCandiesDestroyer += DestoryCandy;
+                    Destroyer.RedCandiesDestroyer += DestoryCandy;
                     break;
                 case CandyColor.blue:
-                    CombosFinder.BlueCandiesDestroyer += DestoryCandy;
+                    Destroyer.BlueCandiesDestroyer += DestoryCandy;
                     break;
                 case CandyColor.green:
-                    CombosFinder.GreenCandiesDestroyer += DestoryCandy;
+                    Destroyer.GreenCandiesDestroyer += DestoryCandy;
                     break;
                 case CandyColor.yellow:
-                    CombosFinder.YellowCandiesDestroyer += DestoryCandy;
+                    Destroyer.YellowCandiesDestroyer += DestoryCandy;
                     break;
                 case CandyColor.purple:
-                    CombosFinder.PurpleCandiesDestroyer += DestoryCandy;
+                    Destroyer.PurpleCandiesDestroyer += DestoryCandy;
                     break;
             }
         }
@@ -213,7 +213,7 @@ public class ScoreCalculator : MonoBehaviour
             }
 
             //DEVO ANCORA CAPIRE SE SERVE QUESTO CONTROLLO
-            if (CandyData.ChainReactionOn && m_candy.Data.TriggeredBy != neighbour)
+            if (m_candy.Data.TriggeredBy != neighbour)
             {
                 neighbour.Data.TriggeredBy = m_candy;
                 neighbour.GetComponent<ScoreCalculator>().enabled = true; //enable the score calculator of the neighbour (chain reaction)

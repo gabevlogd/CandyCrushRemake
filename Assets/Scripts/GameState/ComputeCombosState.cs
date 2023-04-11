@@ -6,18 +6,18 @@ public class ComputeCombosState : StateBase<GameState>
 {
     private float m_computationTimer;
     private bool m_finderEnabled;
-    private CombosFinder m_combosFinder;
+    private Destroyer m_destroyer;
 
-    public ComputeCombosState(CombosFinder finder)
+    public ComputeCombosState(Destroyer destroyer)
     {
         StateID = GameState.ComputeCombos;
-        m_combosFinder = finder;
+        m_destroyer = destroyer;
     }
 
     public override void OnEnter()
     {
         base.OnEnter();
-        m_combosFinder.enabled = false;
+        m_destroyer.enabled = false;
         m_computationTimer = 2f;
         m_finderEnabled = false;
 
@@ -37,7 +37,7 @@ public class ComputeCombosState : StateBase<GameState>
         else if (m_finderEnabled == false)
         {
             m_finderEnabled = true;
-            m_combosFinder.enabled = true;
+            m_destroyer.enabled = true;
         }
     }
 
