@@ -89,7 +89,7 @@ public class PostRefillCombosManager : MonoBehaviour
         {
             for (int k = m_startingTile.x; k <= m_endingTile.x; k++)
             {
-                Tile curTile = m_gridManager.Tiles[combo.y, k];
+                Tile curTile = m_gridManager.Tiles[m_startingTile.y, k];
                 Candy curCandy = curTile.GetComponentInChildren<Candy>();
 
                 if (curCandy.Data.AlreadyAdded == false)
