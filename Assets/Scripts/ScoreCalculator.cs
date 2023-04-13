@@ -21,7 +21,6 @@ public class ScoreCalculator : MonoBehaviour
     {
         CheckScore();
         m_candy.Data.TriggeredBy = null;
-        //if (GameManager.Instance.PreviousState.StateID != GameState.WaitMove) Debug.Log("Done");
     }
 
     /// <summary>
@@ -226,8 +225,6 @@ public class ScoreCalculator : MonoBehaviour
     /// </summary>
     public void DestoryCandy()
     {
-        //UpdateRefillData();
-
         if (m_candy.Data.Hscore >= 2)
         {
             foreach(Candy candy in m_horizontalTwin)

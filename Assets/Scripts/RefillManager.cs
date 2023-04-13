@@ -9,12 +9,15 @@ public class RefillManager : MonoBehaviour
     public Candy CandyPrefab;
 
     private int[] m_lowestRows;
+    private int[] m_firstFullRows;
 
     private void OnEnable()
     {
         m_lowestRows = new int[GridManager.Instance.MaxColumn];
+        m_firstFullRows = new int[GridManager.Instance.MaxColumn];
 
         FindLowestTiles();
+        FindFirstFullTile();
         StartCandiesFall();
         RefillEmptyTiles();
     }
@@ -29,31 +32,13 @@ public class RefillManager : MonoBehaviour
             if (candy != null) candy.Data.ResetData();
         }
 
-        //PostRefillCombosManager.enabled = true;
-
-        //CandyData.ChainReactionOn = false;
-
-        //foreach (Tile tile in GridManager.Instance.Tiles)
-        //{
-        //    Candy candy = tile.GetComponentInChildren<Candy>();
-        //    if (candy != null) candy.GetComponent<ScoreCalculator>().enabled = true;
-        //}
-
-
-        //foreach (Candy candy in CandiesToCheckAfterRefill)
-        //{
-        //    if (!candy.GetComponent<ScoreCalculator>().enabled) candy.GetComponent<ScoreCalculator>().enabled = true;
-        //}
-
-        //CandiesToCheckAfterRefill = new List<Candy>();
-
-        //GameManager.Instance.ChangeState(GameState.WaitMove);
+        GameManager.Instance.ChangeState(GameState.PostRefill);
 
     }
 
 
     /// <summary>
-    /// For each column finds the lowest empty tile and stores it 
+    /// For each column finds the lowest empty tile's row and stores it 
     /// </summary>
     private void FindLowestTiles()
     {
@@ -64,9 +49,33 @@ public class RefillManager : MonoBehaviour
 
             for (int j = 1; j < TilesToRefill[i].Count; j++)
             {
-                if (TilesToRefill[i][j].Data.Row > m_lowestRows[i]) continue;
+                if (TilesToRefill[i][j].Data.Row >= m_lowestRows[i]) continue;
                 else m_lowestRows[i] = TilesToRefill[i][j].Data.Row;
             }
+            //Debug.Log(m_lowestRows[i]);
+        }
+    }
+
+    /// <summary>
+    /// For each column finds the first full tile's row, after the lowest empty one, and stores it 
+    /// </summary>
+    private void FindFirstFullTile()
+    {
+        for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        {
+            if (TilesToRefill[i].Count == 0) continue;
+
+            int firstFullRow = -1;
+            if (m_lowestRows[i] < GridManager.Instance.MaxRow - 1) firstFullRow = m_lowestRows[i] + 1;
+
+            if (firstFullRow != -1)
+            {
+                while (firstFullRow < GridManager.Instance.MaxRow && GridManager.GetTile(firstFullRow, i).transform.childCount == 0) firstFullRow++;
+            }
+            
+            m_firstFullRows[i] = firstFullRow;
+
+            //Debug.Log(m_firstFullRows[i]);
         }
     }
 
@@ -77,23 +86,29 @@ public class RefillManager : MonoBehaviour
     {
         for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
         {
-            if (TilesToRefill[i].Count == 0) continue;
+            if (TilesToRefill[i].Count == 0 || m_firstFullRows[i] == -1) continue;
 
-            int numberOfEmptyTiles = TilesToRefill[i].Count;
-            int firstFullTile = m_lowestRows[i] + numberOfEmptyTiles;
+            int lowestRow = m_lowestRows[i];
 
-            for (int j = firstFullTile; j < GridManager.Instance.MaxRow; j++)
+            for (int j = m_firstFullRows[i]; j < GridManager.Instance.MaxRow; j++)
             {
-                Candy candy = GridManager.Instance.Tiles[j, i].GetComponentInChildren<Candy>();
-                candy.transform.SetParent(GridManager.Instance.Tiles[j - numberOfEmptyTiles, i].transform); //set new parent of candy (before the fall)
-                candy.GetComponent<GravityComponent>().enabled = true;
+                Candy candy = GridManager.GetCandy(j, i);
 
-                //CandiesToCheckAfterRefill.Add(candy);
+                if (candy == null) continue;
+
+                Tile newParent = GridManager.GetTile(lowestRow++, i);
+                if (newParent != null)
+                {
+                    candy.transform.SetParent(newParent.transform); //set new parent of candy (before the fall)
+                    candy.GetComponent<GravityComponent>().enabled = true;
+                }
             }
-
         }
     }
 
+    /// <summary>
+    /// Refills the empty tiles
+    /// </summary>
     private void RefillEmptyTiles()
     {
         for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
@@ -105,20 +120,12 @@ public class RefillManager : MonoBehaviour
             for (int j = 0; j < TilesToRefill[i].Count; j++)
             {
                 Transform parent = GridManager.Instance.Tiles[rowToRefill++, i].transform;
-                SpawnNewCandy(parent);
+                GridManager.SpawnNewCandy(parent);
             }
         }
 
         this.enabled = false;
     }
 
-    private void SpawnNewCandy(Transform parent)
-    {
-        Candy candy = Instantiate(CandyPrefab, parent);
-        CandyColor candyColor = (CandyColor)GridManager.RandomColor();
-        candy.Initialize(0, 0, candyColor, candy.CandySprites[(int)candyColor]);
-
-        //CandiesToCheckAfterRefill.Add(candy);
-    }
 
 }

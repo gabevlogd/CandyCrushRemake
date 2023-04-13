@@ -5,7 +5,7 @@ using UnityEngine;
 public class ComputeCombosState : StateBase<GameState>
 {
     private float m_computationTimer;
-    private bool m_finderEnabled;
+    private bool m_destroyerEnabled;
     private Destroyer m_destroyer;
 
     public ComputeCombosState(Destroyer destroyer)
@@ -18,8 +18,8 @@ public class ComputeCombosState : StateBase<GameState>
     {
         base.OnEnter();
         m_destroyer.enabled = false;
-        m_computationTimer = 2f;
-        m_finderEnabled = false;
+        m_computationTimer = 0.2f;
+        m_destroyerEnabled = false;
 
         if (GameManager.Instance.PreviousState.StateID == GameState.WaitMove)
         {
@@ -34,9 +34,9 @@ public class ComputeCombosState : StateBase<GameState>
 
         //NEED TO FIND A BETTER SOLUTION
         if (m_computationTimer > 0) m_computationTimer -= Time.deltaTime;
-        else if (m_finderEnabled == false)
+        else if (m_destroyerEnabled == false)
         {
-            m_finderEnabled = true;
+            m_destroyerEnabled = true;
             m_destroyer.enabled = true;
         }
     }

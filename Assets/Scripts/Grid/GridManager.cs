@@ -123,6 +123,9 @@ public class GridManager : MonoBehaviour
         return (CandyColor)color;
     }
 
+
+
+
     /// <summary>
     /// </summary>
     /// <returns>random integer between 0 and 3 inclusive</returns>
@@ -140,42 +143,100 @@ public class GridManager : MonoBehaviour
         else return -1;
     }
 
+    /// <summary>
+    /// Returns the candy in the passed coordinates
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="column"></param>
+    /// <returns></returns>
+    public static Candy GetCandy(int row, int column)
+    {
+        //checks if passed coordinates are valid
+        if (row < 0 || row >= Instance.MaxRow || column < 0 || column >= Instance.MaxColumn)
+        {
+            Debug.Log("NOT VALID COORDINATES");
+            return null;
+        }
+
+        Tile tile = Instance.Tiles[row, column];
+        return GetCandy(tile);
+    }
+
+    /// <summary>
+    /// Returns the candy of the passed tile if there are in it
+    /// </summary>
+    /// <param name="tile">tile where to look for candy</param>
+    /// <returns>candy in the tile</returns>
+    public static Candy GetCandy(Tile tile)
+    {
+        int childCount = tile.transform.childCount;
+        Candy candyToReturn = null;
+
+        //checks if there are candies in tile
+        if (childCount == 0)
+        {
+            Debug.Log("CANDY NOT FOUND");
+            return candyToReturn;
+        }
+
+        //checks if there are more than one candy in tile
+        if (childCount > 1)
+        {
+            //gets the first candy and destroy the others
+            for (int i = 0; i < childCount; i++)
+            {
+                if (i == 0) candyToReturn = tile.transform.GetChild(i).GetComponent<Candy>();
+                else Destroy(tile.transform.GetChild(i));
+            }
+
+            Debug.Log("MULTIPLE CANDY FOUND");
+            return candyToReturn;
+        }
+
+        candyToReturn = tile.GetComponentInChildren<Candy>();
+        return candyToReturn;
+    }
+
+
+
+    /// <param name="row"></param>
+    /// <param name="column"></param>
+    /// <returns>the tile in the passed coordinates</returns>
+    public static Tile GetTile(int row, int column)
+    {
+        if (row < 0 || row >= Instance.MaxRow || column < 0 || column >= Instance.MaxColumn)
+        {
+            Debug.Log("NOT VALID COORDINATES");
+            return null;
+        }
+
+        return Instance.Tiles[row, column];
+    }
+
+    /// <summary>
+    /// Returns the tile of the passed candy
+    /// </summary>
+    /// <param name="candy">candy of the wanted tile</param>
+    /// <returns>tile of the candy</returns>
+    public static Tile GetTile(Candy candy)
+    {
+        return candy.GetComponentInParent<Tile>();
+    }
+
+    /// <summary>
+    /// Spawns a candy in the passed parent's position 
+    /// </summary>
+    /// <param name="parent">The transform of the tile where to spawn the candy</param>
+    public static void SpawnNewCandy(Transform parent)
+    {
+        Candy candy = Instantiate(Instance.CandyPrefab, parent);
+        CandyColor candyColor = (CandyColor)GridManager.RandomColor();
+        candy.Initialize(0, 0, candyColor, candy.CandySprites[(int)candyColor]);
+    }
 
 
 }
 
 
 
-/// <summary>
-/// Prevents three tiles of the same color from spawning one after the other horizontally or vertically
-/// </summary>
-/// <param name="color"></param>
-/// <returns></returns>
-//private CandyColor CheckColorAdmissibility(int color)
-//{
-//    if (m_lastColor == -1)
-//    {
-//        m_lastColor = color;
-//        return (CandyColor)color;
-//    }
-//    if (m_secondLastColor == -1)
-//    {
-//        m_secondLastColor = color;
-//        return (CandyColor)color;
-//    }
 
-
-//    if (m_lastColor == m_secondLastColor)
-//    {
-//        while (color == m_lastColor) color = RandomColor();
-
-//        m_secondLastColor = m_lastColor;
-//        m_lastColor = color;
-//        return (CandyColor)color;
-//    }
-
-
-//    m_secondLastColor = m_lastColor;
-//    m_lastColor = color;
-//    return (CandyColor)color;
-//}

@@ -13,8 +13,7 @@ public class PostRefillCombosManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("Actived");
-
+        //Debug.Log("Actived");
         m_gridManager = GridManager.Instance;
         m_startingTile = new Vector2Int(-1, -1);
         m_endingTile = new Vector2Int(-1, -1);
@@ -41,7 +40,8 @@ public class PostRefillCombosManager : MonoBehaviour
         {
             for (int j = 0; j < m_gridManager.MaxColumn; j++)
             {
-                Candy currentCandy = m_gridManager.Tiles[i, j].GetComponentInChildren<Candy>();
+                Candy currentCandy = GridManager.GetCandy(i, j);
+
 
                 if (j == 0)
                 {
@@ -49,7 +49,7 @@ public class PostRefillCombosManager : MonoBehaviour
                     continue;
                 }
 
-                if (currentCandy.Data.candyColor == m_currentColor)
+                if (currentCandy != null && currentCandy.Data.candyColor == m_currentColor)
                 {
                     m_endingTile = new Vector2Int(j, i);
                     continue;
@@ -58,11 +58,15 @@ public class PostRefillCombosManager : MonoBehaviour
             }
 
             int lastColumn = m_gridManager.MaxColumn - 1;
-            Candy lastCandy = m_gridManager.Tiles[i, lastColumn].GetComponentInChildren<Candy>();
+            Candy lastCandy = GridManager.GetCandy(i, lastColumn);
             LastIteration(i, lastColumn, lastCandy);
         }
 
-        Debug.Log("CheckHorizontalCombo ended");
+        Debug.Log("CheckHorizontalCombo ended"); 
+    }
+
+    private void CheckVerticalCombo()
+    {
         
     }
 
@@ -89,10 +93,13 @@ public class PostRefillCombosManager : MonoBehaviour
         {
             for (int k = m_startingTile.x; k <= m_endingTile.x; k++)
             {
-                Tile curTile = m_gridManager.Tiles[m_startingTile.y, k];
-                Candy curCandy = curTile.GetComponentInChildren<Candy>();
+                Tile curTile = GridManager.GetTile(m_startingTile.y, k);
+                if (curTile == null) continue;
 
-                if (curCandy.Data.AlreadyAdded == false)
+                Candy curCandy = GridManager.GetCandy(curTile);
+
+
+                if (curCandy != null && curCandy.Data.AlreadyAdded == false)
                 {
                     curCandy.Data.AlreadyAdded = true;
                     RefillManager.TilesToRefill[k].Add(curTile);
@@ -103,6 +110,7 @@ public class PostRefillCombosManager : MonoBehaviour
 
         SetFirstIteration(row, column, candy);
     }
+
 
     private void AddToDestroyer(Candy candy)
     {

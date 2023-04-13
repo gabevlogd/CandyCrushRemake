@@ -5,6 +5,8 @@ using UnityEngine;
 public class RefillGridState : StateBase<GameState>
 {
     private RefillManager m_refillManager;
+    private float m_computationTimer;
+    private bool m_refillManagerEnabled;
 
     public RefillGridState(RefillManager refillManager)
     {
@@ -18,13 +20,20 @@ public class RefillGridState : StateBase<GameState>
     public override void OnEnter()
     {
         base.OnEnter();
-        m_refillManager.enabled = true;
+        m_computationTimer = 0.2f;
+        m_refillManagerEnabled = false;
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (!m_refillManager.enabled) GameManager.Instance.ChangeState(GameState.PostRefill);
+
+        if (m_computationTimer > 0) m_computationTimer -= Time.deltaTime;
+        else if (m_refillManagerEnabled == false)
+        {
+            m_refillManagerEnabled = true;
+            m_refillManager.enabled = true;
+        }
     }
 
     public override void OnExit()
