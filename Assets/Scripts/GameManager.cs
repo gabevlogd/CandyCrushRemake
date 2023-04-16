@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public Destroyer Destroyer;
     public RefillManager RefillManager;
     public PostRefillCombosManager PostRefillCombosManager;
+    public PlayerScoresManager PlayerScoresManager;
+    public HUDManager HUDManager;
 
     private StateBase<GameState> m_currentState;
     private StateBase<GameState> m_previuosState;
@@ -30,6 +32,9 @@ public class GameManager : MonoBehaviour
         GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(Destroyer));
         GameStates.Add(GameState.RefillGrid, new RefillGridState(RefillManager));
         GameStates.Add(GameState.PostRefill, new PostRefillState(PostRefillCombosManager));
+        GameStates.Add(GameState.GameWon, new GameWonState());
+        GameStates.Add(GameState.GameLost, new GameLostState());
+
 
 
         m_currentState = GameStates[GameState.WaitMove];
@@ -39,6 +44,8 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         m_currentState.OnUpdate();
+        if (LoseCondition()) ChangeState(GameState.GameLost);
+        if (WinCondition()) ChangeState(GameState.GameWon);
     }
 
     public void ChangeState(GameState state)
@@ -48,6 +55,34 @@ public class GameManager : MonoBehaviour
         m_currentState = GameStates[state];
         m_currentState.OnEnter();
     }
+
+    /// <summary>
+    /// Returns true if the player loses the game
+    /// </summary>
+    /// <returns></returns>
+    private bool LoseCondition()
+    {
+        if (m_currentState.StateID == GameState.WaitMove)
+        {
+            if (PlayerScoresManager.Data.Moves <= 0 && PlayerScoresManager.Data.Points < PlayerScoresManager.TargetPoints) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true if the player wins the game
+    /// </summary>
+    /// <returns></returns>
+    private bool WinCondition()
+    {
+        if (m_currentState.StateID == GameState.WaitMove)
+        {
+            if (PlayerScoresManager.Data.Points >= PlayerScoresManager.TargetPoints) return true;
+        }
+
+        return false;
+    }
 }
 
 public enum GameState
@@ -55,5 +90,7 @@ public enum GameState
     WaitMove,
     ComputeCombos,
     RefillGrid,
-    PostRefill
+    PostRefill,
+    GameWon,
+    GameLost
 }

@@ -34,6 +34,7 @@ public class ComputeCombosState : StateBase<GameState>
 
         //NEED TO FIND A BETTER SOLUTION
         if (m_computationTimer > 0) m_computationTimer -= Time.deltaTime;
+        else if (SwappedCandiesMakeCombo() == false) GameManager.Instance.ChangeState(GameState.WaitMove);
         else if (m_destroyerEnabled == false)
         {
             m_destroyerEnabled = true;
@@ -44,5 +45,21 @@ public class ComputeCombosState : StateBase<GameState>
     public override void OnExit()
     {
         base.OnExit();
+    }
+
+    public bool SwappedCandiesMakeCombo()
+    {
+        Candy candy0 = GridManager.GetCandy(GridManager.PressedTiles[0]);
+        Candy candy1 = GridManager.GetCandy(GridManager.PressedTiles[1]);
+
+        if (candy0.Data.AlreadyAdded || candy1.Data.AlreadyAdded)
+        {
+            PlayerScoresManager.MovesUpdateNeeded = true;
+            return true;
+        }
+
+        //reswap candies before, becasue only moves that makes combos are alowed
+        GridManager.SwapCandies(candy0, candy1);
+        return false;
     }
 }

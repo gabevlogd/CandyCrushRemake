@@ -234,6 +234,19 @@ public class GridManager : MonoBehaviour
         candy.Initialize(0, 0, candyColor, candy.CandySprites[(int)candyColor]);
     }
 
+    /// <summary>
+    /// swaps the position of two candies
+    /// </summary>
+    /// <param name="candy0"></param>
+    /// <param name="candy1"></param>
+    public static void SwapCandies(Candy candy0, Candy candy1)
+    {
+        Transform parent0 = candy0.transform.parent;
+        Transform parent1 = candy1.transform.parent;
+        candy0.transform.SetParent(parent1, false);
+        candy1.transform.SetParent(parent0, false);
+    }
+
 
 }
 

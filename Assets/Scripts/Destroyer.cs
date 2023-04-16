@@ -16,6 +16,7 @@ public class Destroyer : MonoBehaviour
     private void OnEnable()
     {
         //Debug.Log("CombosFinder enabled");
+        PlayerScoresManager.PointsUpdateNeeded = true;
         DestroyCombos();
         this.enabled = false;
     }

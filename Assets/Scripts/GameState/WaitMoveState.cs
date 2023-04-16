@@ -28,8 +28,7 @@ public class WaitMoveState : StateBase<GameState>
                 Candy candy0 = GridManager.PressedTiles[0].gameObject.GetComponentInChildren<Candy>();
                 Candy candy1 = GridManager.PressedTiles[1].gameObject.GetComponentInChildren<Candy>();
 
-                SwapCandies(candy0, candy1);
-                //WaitForNewMove();
+                GridManager.SwapCandies(candy0, candy1);
                 GameManager.Instance.ChangeState(GameState.ComputeCombos); //go to the next game state
             }
         }
@@ -56,10 +55,16 @@ public class WaitMoveState : StateBase<GameState>
 
         if (Mathf.Abs(Vector2.Dot(vecBetween, Vector2.up)) == 1 || Mathf.Abs(Vector2.Dot(vecBetween, Vector2.right)) == 1)
         {
-            if (pressedVec.x == lastPressedVec.x || pressedVec.y == lastPressedVec.y) return true;
+            if (pressedVec.x == lastPressedVec.x || pressedVec.y == lastPressedVec.y)
+            {
+                //stops visual feedbacks of selection
+                lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
+                return true;
+            }
         }
 
         WaitForNewMove();
+
         //stops visual feedbacks of selection
         lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
         return false;
@@ -71,17 +76,17 @@ public class WaitMoveState : StateBase<GameState>
         GridManager.PressedTiles[1] = null;
     }
 
-    /// <summary>
-    /// swaps the position of two candies
-    /// </summary>
-    /// <param name="candy0"></param>
-    /// <param name="candy1"></param>
-    private void SwapCandies(Candy candy0, Candy candy1)
-    {
-        candy0.transform.SetParent(GridManager.PressedTiles[1].transform, false);
-        candy1.transform.SetParent(GridManager.PressedTiles[0].transform, false);
+    ///// <summary>
+    ///// swaps the position of two candies
+    ///// </summary>
+    ///// <param name="candy0"></param>
+    ///// <param name="candy1"></param>
+    //private void SwapCandies(Candy candy0, Candy candy1)
+    //{
+    //    candy0.transform.SetParent(GridManager.PressedTiles[1].transform, false);
+    //    candy1.transform.SetParent(GridManager.PressedTiles[0].transform, false);
 
-        //stops visual feedbacks of selection
-        candy0.Animator.SetBool("Selected", false);
-    }
+    //    //stops visual feedbacks of selection
+    //    candy0.Animator.SetBool("Selected", false);
+    //}
 }

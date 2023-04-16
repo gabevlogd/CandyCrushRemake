@@ -9,8 +9,7 @@ public class Candy : MonoBehaviour
     public Animator Animator;
     public Sprite[] CandySprites;
 
-    //PUBLIC JUST FOR DEBUG
-    public Image m_image;
+    private Image m_image;
 
     private void Awake()
     {
