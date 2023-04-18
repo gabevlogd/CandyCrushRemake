@@ -7,7 +7,7 @@ public class HUDManager : MonoBehaviour
 {
     public Text Points, Moves;
 
-    public void UpdatePointsUI(int points) => Points.text = "POINTS: " + points.ToString();
+    public void UpdatePointsUI(int points, int targetPoints) => Points.text = "Points: " + points.ToString() + "/" + targetPoints;
 
-    public void UpdateMovesUI(int moves) => Moves.text = "MOVES: " + moves.ToString();
+    public void UpdateMovesUI(int moves) => Moves.text = "Moves: " + moves.ToString();
 }

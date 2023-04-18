@@ -35,9 +35,4 @@ public class RefillGridState : StateBase<GameState>
             m_refillManager.enabled = true;
         }
     }
-
-    public override void OnExit()
-    {
-        base.OnExit();
-    }
 }

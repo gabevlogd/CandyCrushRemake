@@ -25,15 +25,7 @@ public class Destroyer : MonoBehaviour
     {
         ResetDestroyer();
 
-        //ONLY FOR DEBUG, REAL VALUE IS GAMESTATE.REFILLGRID
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //GameState nextGameState = GameState.WaitMove;
-        //for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
-        //{
-        //    if (RefillManager.TilesToRefill[i].Count > 0) nextGameState = GameState.RefillGrid;
-        //}
         GameManager.Instance.ChangeState(GameState.RefillGrid); 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     private void DestroyCombos()

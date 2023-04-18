@@ -17,14 +17,10 @@ public class PostRefillState : StateBase<GameState>
     public override void OnEnter()
     {
         base.OnEnter();
-        m_computationTimer = 2f;
+        m_computationTimer = 1.5f;
         m_postRefillManagerEnabled = false;
     }
 
-    public override void OnExit()
-    {
-        base.OnExit();
-    }
 
     public override void OnUpdate()
     {

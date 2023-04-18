@@ -6,12 +6,13 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerScoresData
 {
-    public int Moves, Points, MathcRating;
+    public int Moves, Points;
+    public float Record;
 
     public PlayerScoresData(int moves)
     {
         Moves = moves;
         Points = 0;
-        MathcRating = 0;
+        Record = 0;
     }
 }

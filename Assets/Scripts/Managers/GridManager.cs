@@ -123,9 +123,6 @@ public class GridManager : MonoBehaviour
         return (CandyColor)color;
     }
 
-
-
-
     /// <summary>
     /// </summary>
     /// <returns>random integer between 0 and 3 inclusive</returns>

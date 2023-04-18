@@ -8,8 +8,9 @@ public class PlayerScoresManager : MonoBehaviour
 
     public static bool PointsUpdateNeeded;
     public static bool MovesUpdateNeeded;
+    public static bool NewRecord;
 
-    public PlayerScoresData Data;
+    public static PlayerScoresData Data;
 
     private HUDManager m_HUDManager;
 
@@ -20,7 +21,7 @@ public class PlayerScoresManager : MonoBehaviour
         m_HUDManager = GameManager.Instance.HUDManager;
         Data = new PlayerScoresData(AvailablesMoves);
 
-        m_HUDManager.UpdatePointsUI(Data.Points);
+        m_HUDManager.UpdatePointsUI(Data.Points, TargetPoints);
         m_HUDManager.UpdateMovesUI(Data.Moves);
     }
 
@@ -28,6 +29,12 @@ public class PlayerScoresManager : MonoBehaviour
     {
         if (PointsUpdateNeeded) UpdatePoints();
         if (MovesUpdateNeeded) UpdateMoves();
+    }
+
+    private void OnDisable()
+    {
+        UpdateRecord();
+        //Debug.Log(PlayerPrefs.GetInt("Record"));
     }
 
     /// <summary>
@@ -43,7 +50,7 @@ public class PlayerScoresManager : MonoBehaviour
             }
         }
 
-        m_HUDManager.UpdatePointsUI(Data.Points);
+        m_HUDManager.UpdatePointsUI(Data.Points, TargetPoints);
         PointsUpdateNeeded = false;
     }
 
@@ -55,5 +62,26 @@ public class PlayerScoresManager : MonoBehaviour
         Data.Moves--;
         m_HUDManager.UpdateMovesUI(Data.Moves);
         MovesUpdateNeeded = false;
+    }
+
+    private void UpdateRecord()
+    {
+        if (Data.Moves > 0) Data.Record = (float)(Data.Points * Data.Moves) / 100f;
+        else Data.Record = (float)(Data.Points) / 100f;
+
+        if (PlayerPrefs.HasKey("Record"))
+        {
+            if (PlayerPrefs.GetFloat("Record") < Data.Record)
+            {
+                NewRecord = true;
+                PlayerPrefs.SetFloat("Record", Data.Record);
+            }
+            else NewRecord = false;
+        }
+        else
+        {
+            NewRecord = true;
+            PlayerPrefs.SetFloat("Record", Data.Record);
+        }
     }
 }

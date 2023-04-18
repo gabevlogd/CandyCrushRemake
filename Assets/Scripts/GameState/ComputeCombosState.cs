@@ -42,11 +42,10 @@ public class ComputeCombosState : StateBase<GameState>
         }
     }
 
-    public override void OnExit()
-    {
-        base.OnExit();
-    }
-
+    /// <summary>
+    /// Checks if the swapped candies form combos
+    /// </summary>
+    /// <returns></returns>
     public bool SwappedCandiesMakeCombo()
     {
         Candy candy0 = GridManager.GetCandy(GridManager.PressedTiles[0]);
