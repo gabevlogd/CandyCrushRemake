@@ -49,21 +49,16 @@ public class WaitMoveState : StateBase<GameState>
         Tile pressedTile = GridManager.PressedTiles[1];
         Tile lastPressedTile = GridManager.PressedTiles[0];
 
-        Vector2 pressedVec = new Vector2(pressedTile.Data.Column, pressedTile.Data.Row);
-        Vector2 lastPressedVec = new Vector2(lastPressedTile.Data.Column, lastPressedTile.Data.Row);
-        Vector2 vecBetween = lastPressedVec - pressedVec;
+        Vector2Int pressedVec = new Vector2Int(pressedTile.Data.Column, pressedTile.Data.Row);
+        Vector2Int lastPressedVec = new Vector2Int(lastPressedTile.Data.Column, lastPressedTile.Data.Row);
+        Vector2Int vecBetween = lastPressedVec - pressedVec;
 
-        if (Mathf.Abs(Vector2.Dot(vecBetween, Vector2.up)) == 1 || Mathf.Abs(Vector2.Dot(vecBetween, Vector2.right)) == 1)
+        if (vecBetween.magnitude == 1)
         {
-            if (pressedVec.x == lastPressedVec.x || pressedVec.y == lastPressedVec.y)
-            {
-                //stops visual feedbacks of selection
-                lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
-                return true;
-            }
+            //stops visual feedbacks of selection
+            lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
+            return true;
         }
-
-       // WaitForNewMove();
 
         //stops visual feedbacks of selection
         lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
@@ -78,3 +73,14 @@ public class WaitMoveState : StateBase<GameState>
 
 
 }
+
+
+//if (Mathf.Abs(Vector2.Dot(vecBetween, Vector2.up)) == 1 || Mathf.Abs(Vector2.Dot(vecBetween, Vector2.right)) == 1)
+//{
+//    if (pressedVec.x == lastPressedVec.x || pressedVec.y == lastPressedVec.y)
+//    {
+//      //stops visual feedbacks of selection
+//        lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
+//        return true;
+//    }
+//}
