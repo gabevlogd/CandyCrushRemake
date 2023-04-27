@@ -7,12 +7,10 @@ public class TileData
 {
     public int Row;
     public int Column;
-    public GridManager GridManager;
 
-    public TileData(GridManager gridManager, int newRow, int newColumn)
+    public TileData(int newRow, int newColumn)
     {
         Row = newRow;
         Column = newColumn;
-        GridManager = gridManager;
     }
 }

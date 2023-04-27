@@ -17,7 +17,7 @@ public class GameOverState : StateBase<GameState>
     {
         GameManager.Instance.PlayerScoresManager.enabled = false;
         GameManager.Instance.HUDManager.gameObject.SetActive(false);
-        GridManager.Instance.gameObject.SetActive(false);
+        GameManager.Instance.GridManager.gameObject.SetActive(false);
 
         if (GameManager.Instance.GameWon) m_winTab.gameObject.SetActive(true);
         else m_loseTab.gameObject.SetActive(true);

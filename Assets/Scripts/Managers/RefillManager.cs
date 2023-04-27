@@ -4,31 +4,33 @@ using UnityEngine;
 
 public class RefillManager : MonoBehaviour
 {
-    public static List<Tile>[] TilesToRefill;
+    public List<Tile>[] TilesToRefill;
 
     public Candy CandyPrefab;
 
     private int[] m_lowestRows;
     private int[] m_firstFullRows;
+    private GridManager m_gridManager;
 
     private void OnEnable()
     {
-        m_lowestRows = new int[GridManager.Instance.MaxColumn];
-        m_firstFullRows = new int[GridManager.Instance.MaxColumn];
+        m_gridManager = GameManager.Instance.GridManager;
+        m_lowestRows = new int[m_gridManager.MaxColumn];
+        m_firstFullRows = new int[m_gridManager.MaxColumn];
 
-        FindLowestTiles();
-        FindFirstFullTile();
+        FindLowestRows();
+        FindFirstFullRows();
         StartCandiesFall();
         RefillEmptyTiles();
     }
 
     private void OnDisable()
     {
-        for (int i = 0; i < GridManager.Instance.MaxColumn; i++) RefillManager.TilesToRefill[i] = new List<Tile>();
+        for (int i = 0; i < m_gridManager.MaxColumn; i++) TilesToRefill[i] = new List<Tile>();
 
-        foreach (Tile tile in GridManager.Instance.Tiles)
+        foreach (Tile tile in m_gridManager.Tiles)
         {
-            Candy candy = tile.GetComponentInChildren<Candy>();
+            Candy candy = GridManager.GetCandy(tile);
             if (candy != null) candy.Data.ResetData();
         }
 
@@ -38,11 +40,11 @@ public class RefillManager : MonoBehaviour
 
 
     /// <summary>
-    /// For each column finds the lowest empty tile's row and stores it 
+    /// For each column finds the lowest empty row and stores it 
     /// </summary>
-    private void FindLowestTiles()
+    private void FindLowestRows()
     {
-        for(int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        for(int i = 0; i < m_gridManager.MaxColumn; i++)
         {
             if (TilesToRefill[i].Count == 0) continue;
             else m_lowestRows[i] = TilesToRefill[i][0].Data.Row;
@@ -57,20 +59,20 @@ public class RefillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// For each column finds the first full tile's row, after the lowest empty one, and stores it 
+    /// For each column finds the first full row, after the lowest empty one, and stores it 
     /// </summary>
-    private void FindFirstFullTile()
+    private void FindFirstFullRows()
     {
-        for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        for (int i = 0; i < m_gridManager.MaxColumn; i++)
         {
             if (TilesToRefill[i].Count == 0) continue;
 
             int firstFullRow = -1;
-            if (m_lowestRows[i] < GridManager.Instance.MaxRow - 1) firstFullRow = m_lowestRows[i] + 1;
+            if (m_lowestRows[i] < m_gridManager.MaxRow - 1) firstFullRow = m_lowestRows[i] + 1;
 
             if (firstFullRow != -1)
             {
-                while (firstFullRow < GridManager.Instance.MaxRow && GridManager.GetTile(firstFullRow, i).transform.childCount == 0) firstFullRow++;
+                while (firstFullRow < m_gridManager.MaxRow && GridManager.GetTile(firstFullRow, i).transform.childCount == 0) firstFullRow++;
             }
             
             m_firstFullRows[i] = firstFullRow;
@@ -84,13 +86,13 @@ public class RefillManager : MonoBehaviour
     /// </summary>
     private void StartCandiesFall()
     {
-        for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        for (int i = 0; i < m_gridManager.MaxColumn; i++)
         {
             if (TilesToRefill[i].Count == 0 || m_firstFullRows[i] == -1) continue;
 
             int lowestRow = m_lowestRows[i];
 
-            for (int j = m_firstFullRows[i]; j < GridManager.Instance.MaxRow; j++)
+            for (int j = m_firstFullRows[i]; j < m_gridManager.MaxRow; j++)
             {
                 Candy candy = GridManager.GetCandy(j, i);
 
@@ -111,15 +113,15 @@ public class RefillManager : MonoBehaviour
     /// </summary>
     private void RefillEmptyTiles()
     {
-        for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        for (int i = 0; i < m_gridManager.MaxColumn; i++)
         {
             if (TilesToRefill[i].Count == 0) continue;
 
-            int rowToRefill = GridManager.Instance.MaxRow - TilesToRefill[i].Count;
+            int rowToRefill = m_gridManager.MaxRow - TilesToRefill[i].Count;
 
             for (int j = 0; j < TilesToRefill[i].Count; j++)
             {
-                Transform parent = GridManager.Instance.Tiles[rowToRefill++, i].transform;
+                Transform parent = m_gridManager.Tiles[rowToRefill++, i].transform;
                 GridManager.SpawnNewCandy(parent);
             }
         }

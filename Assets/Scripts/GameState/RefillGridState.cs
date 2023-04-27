@@ -5,16 +5,18 @@ using UnityEngine;
 public class RefillGridState : StateBase<GameState>
 {
     private RefillManager m_refillManager;
+    private GridManager m_gridManager;
     private float m_computationTimer;
     private bool m_refillManagerEnabled;
 
-    public RefillGridState(RefillManager refillManager)
+    public RefillGridState(RefillManager refillManager, GridManager gridManager)
     {
         StateID = GameState.RefillGrid;
         m_refillManager = refillManager;
+        m_gridManager = gridManager;
 
-        RefillManager.TilesToRefill = new List<Tile>[GridManager.Instance.MaxColumn];
-        for (int i = 0; i < GridManager.Instance.MaxColumn; i++) RefillManager.TilesToRefill[i] = new List<Tile>();
+        m_refillManager.TilesToRefill = new List<Tile>[m_gridManager.MaxColumn];
+        for (int i = 0; i < m_gridManager.MaxColumn; i++) m_refillManager.TilesToRefill[i] = new List<Tile>();
     }
 
     public override void OnEnter()

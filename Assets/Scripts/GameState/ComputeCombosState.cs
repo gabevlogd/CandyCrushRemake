@@ -7,11 +7,13 @@ public class ComputeCombosState : StateBase<GameState>
     private float m_computationTimer;
     private bool m_destroyerEnabled;
     private Destroyer m_destroyer;
+    private GridManager m_gridManager;
 
-    public ComputeCombosState(Destroyer destroyer)
+    public ComputeCombosState(Destroyer destroyer, GridManager gridManager)
     {
         StateID = GameState.ComputeCombos;
         m_destroyer = destroyer;
+        m_gridManager = gridManager;
     }
 
     public override void OnEnter()
@@ -23,8 +25,8 @@ public class ComputeCombosState : StateBase<GameState>
 
         if (GameManager.Instance.PreviousState.StateID == GameState.WaitMove)
         {
-            GridManager.PressedTiles[0].GetComponentInChildren<ScoreCalculator>().enabled = true;
-            GridManager.PressedTiles[1].GetComponentInChildren<ScoreCalculator>().enabled = true;
+            m_gridManager.PressedTiles[0].GetComponentInChildren<ScoreCalculator>().enabled = true;
+            m_gridManager.PressedTiles[1].GetComponentInChildren<ScoreCalculator>().enabled = true;
         }
     }
 
@@ -48,8 +50,8 @@ public class ComputeCombosState : StateBase<GameState>
     /// <returns></returns>
     public bool SwappedCandiesMakeCombo()
     {
-        Candy candy0 = GridManager.GetCandy(GridManager.PressedTiles[0]);
-        Candy candy1 = GridManager.GetCandy(GridManager.PressedTiles[1]);
+        Candy candy0 = GridManager.GetCandy(m_gridManager.PressedTiles[0]);
+        Candy candy1 = GridManager.GetCandy(m_gridManager.PressedTiles[1]);
 
         if (candy0.Data.AlreadyAdded || candy1.Data.AlreadyAdded)
         {

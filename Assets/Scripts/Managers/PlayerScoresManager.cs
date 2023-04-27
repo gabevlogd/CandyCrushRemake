@@ -42,9 +42,9 @@ public class PlayerScoresManager : MonoBehaviour
     /// </summary>
     private void UpdatePoints()
     {
-        for(int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        for(int i = 0; i < GameManager.Instance.GridManager.MaxColumn; i++)
         {
-            foreach(Tile tile in RefillManager.TilesToRefill[i])
+            foreach(Tile tile in GameManager.Instance.RefillManager.TilesToRefill[i])
             {
                 Data.Points += PointsPerCandy;
             }

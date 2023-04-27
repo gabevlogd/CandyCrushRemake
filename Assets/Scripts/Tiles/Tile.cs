@@ -7,9 +7,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler
 {
     public TileData Data;
 
-    public void Initialize(GridManager gridM, int rowInit, int columnInit)
+    public void Initialize(int rowInit, int columnInit)
     {
-        Data = new TileData(gridM, rowInit, columnInit);
+        Data = new TileData(rowInit, columnInit);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -24,17 +24,19 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     /// <param name="eventData"></param>
     private void StoreSelectedTile(PointerEventData eventData)
     {
-        if (!GridManager.PressedTiles[0])
+        if (!GameManager.Instance.GridManager.PressedTiles[0])
         {
             eventData.pointerClick.TryGetComponent(out Tile pressedTile);
-            GridManager.PressedTiles[0] = pressedTile;
-            pressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", true); //visual feedback of the selection
+            GameManager.Instance.GridManager.PressedTiles[0] = pressedTile;
+
+            GridManager.GetCandy(pressedTile).Animator.SetBool("Selected", true); //visual feedback of the selection
+
             return;
         }
-        if (!GridManager.PressedTiles[1])
+        if (!GameManager.Instance.GridManager.PressedTiles[1])
         {
             eventData.pointerClick.TryGetComponent(out Tile pressedTile);
-            GridManager.PressedTiles[1] = pressedTile;
+            GameManager.Instance.GridManager.PressedTiles[1] = pressedTile;
         }
 
         //Debug.Log("move complete");

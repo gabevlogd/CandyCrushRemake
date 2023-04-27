@@ -5,9 +5,12 @@ using UnityEngine;
 public class WaitMoveState : StateBase<GameState>
 {
 
-    public WaitMoveState()
+    private GridManager m_gridManager;
+
+    public WaitMoveState(GridManager gridManager)
     {
         StateID = GameState.WaitMove;
+        m_gridManager = gridManager;
     }
 
     public override void OnEnter()
@@ -20,7 +23,7 @@ public class WaitMoveState : StateBase<GameState>
     {
         base.OnUpdate();
         //if PressedTiles[1] != null means that player has chosen both candies to swap
-        if (GridManager.PressedTiles[1]) CheckMove();
+        if (m_gridManager.PressedTiles[1]) CheckMove();
     }
 
     /// <summary>
@@ -30,8 +33,8 @@ public class WaitMoveState : StateBase<GameState>
     {
         if (LegalMove())
         {
-            Candy candy0 = GridManager.PressedTiles[0].gameObject.GetComponentInChildren<Candy>();
-            Candy candy1 = GridManager.PressedTiles[1].gameObject.GetComponentInChildren<Candy>();
+            Candy candy0 = GridManager.GetCandy(m_gridManager.PressedTiles[0]);
+            Candy candy1 = GridManager.GetCandy(m_gridManager.PressedTiles[1]);
 
             GridManager.SwapCandies(candy0, candy1);
             GameManager.Instance.ChangeState(GameState.ComputeCombos); //go to the next game state
@@ -46,8 +49,8 @@ public class WaitMoveState : StateBase<GameState>
     private bool LegalMove()
     {
         //Debug.Log("LegalTile");
-        Tile pressedTile = GridManager.PressedTiles[1];
-        Tile lastPressedTile = GridManager.PressedTiles[0];
+        Tile pressedTile = m_gridManager.PressedTiles[1];
+        Tile lastPressedTile = m_gridManager.PressedTiles[0];
 
         Vector2Int pressedVec = new Vector2Int(pressedTile.Data.Column, pressedTile.Data.Row);
         Vector2Int lastPressedVec = new Vector2Int(lastPressedTile.Data.Column, lastPressedTile.Data.Row);
@@ -56,19 +59,19 @@ public class WaitMoveState : StateBase<GameState>
         if (vecBetween.magnitude == 1)
         {
             //stops visual feedbacks of selection
-            lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
+            GridManager.GetCandy(lastPressedTile).Animator.SetBool("Selected", false);
             return true;
         }
 
         //stops visual feedbacks of selection
-        lastPressedTile.GetComponentInChildren<Candy>().Animator.SetBool("Selected", false);
+        GridManager.GetCandy(lastPressedTile).Animator.SetBool("Selected", false);
         return false;
     }
 
     private void WaitForNewMove()
     {
-        GridManager.PressedTiles[0] = null;
-        GridManager.PressedTiles[1] = null;
+        m_gridManager.PressedTiles[0] = null;
+        m_gridManager.PressedTiles[1] = null;
     }
 
 

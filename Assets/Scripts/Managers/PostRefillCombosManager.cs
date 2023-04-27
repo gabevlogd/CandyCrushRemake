@@ -7,6 +7,7 @@ public class PostRefillCombosManager : MonoBehaviour
     public Destroyer Destroyer;
      
     private GridManager m_gridManager;
+    private RefillManager m_refillManager;
     private CandyColor m_currentColor;
     private Vector2Int m_startingTile;
     private Vector2Int m_endingTile;
@@ -14,7 +15,8 @@ public class PostRefillCombosManager : MonoBehaviour
     private void OnEnable()
     {
         //Debug.Log("Actived");
-        m_gridManager = GridManager.Instance;
+        m_gridManager = GameManager.Instance.GridManager;
+        m_refillManager = GameManager.Instance.RefillManager;
         m_startingTile = new Vector2Int(-1, -1);
         m_endingTile = new Vector2Int(-1, -1);
 
@@ -35,9 +37,9 @@ public class PostRefillCombosManager : MonoBehaviour
     private void NextState()
     {
         bool restartCycle = true;
-        for (int i = 0; i < GridManager.Instance.MaxColumn; i++)
+        for (int i = 0; i < m_gridManager.MaxColumn; i++)
         {
-            if (RefillManager.TilesToRefill[i].Count > 0) restartCycle = false;
+            if (m_refillManager.TilesToRefill[i].Count > 0) restartCycle = false;
         }
         if (restartCycle)
         {
@@ -143,7 +145,7 @@ public class PostRefillCombosManager : MonoBehaviour
                 if (curCandy != null && curCandy.Data.AlreadyAdded == false)
                 {
                     curCandy.Data.AlreadyAdded = true;
-                    RefillManager.TilesToRefill[k].Add(curTile);
+                    m_refillManager.TilesToRefill[k].Add(curTile);
                     AddToDestroyer(curCandy);
                 }
             }
@@ -175,7 +177,7 @@ public class PostRefillCombosManager : MonoBehaviour
                 if (curCandy != null && curCandy.Data.AlreadyAdded == false)
                 {
                     curCandy.Data.AlreadyAdded = true;
-                    RefillManager.TilesToRefill[m_startingTile.x].Add(curTile);
+                    m_refillManager.TilesToRefill[m_startingTile.x].Add(curTile);
                     AddToDestroyer(curCandy);
                 }
             }

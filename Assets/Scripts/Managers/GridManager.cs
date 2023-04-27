@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class GridManager : MonoBehaviour
 {
-    public static GridManager Instance;
 
     public Tile TilePrefab;
     public Candy CandyPrefab;
@@ -14,15 +13,15 @@ public class GridManager : MonoBehaviour
     public int MaxRow;
     public int MaxColumn;
     public Tile[,] Tiles;
-    public static Tile[] PressedTiles;
+    public Tile[] PressedTiles;
 
+    private static GridManager m_instance;
     private GridLayoutGroup m_gridData;
 
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        m_instance = this;
 
         PressedTiles = new Tile[2];
         Tiles = new Tile[MaxRow, MaxColumn];
@@ -50,7 +49,7 @@ public class GridManager : MonoBehaviour
                 Candy candy = Instantiate(CandyPrefab, tile.transform);
                 CandyColor candyColor = CheckColor(RandomColor(), row, column);
 
-                tile.Initialize(this, row, column);
+                tile.Initialize(row, column);
                 candy.Initialize(0, 0, candyColor, candy.CandySprites[(int)candyColor]);
 
                 tile.name = "Tile - (" + row.ToString() + " - " + column.ToString() + ")";
@@ -78,50 +77,36 @@ public class GridManager : MonoBehaviour
     /// <returns></returns>
     private CandyColor CheckColor(int color, int y, int x)
     {
-        bool checkVertical = false; //must check if there are combinations of three candies vertically?
-        bool checkHorizontal = false; //must check if there are combinations of three candies horizontally?
-
-        //coordinates of the positions to be checked
-        int[] verticalKeyMapOne = { y-1, x };
-        int[] verticalKeyMapTwo = { y-2, x };
-        int[] horizontalKeyMapOne = { y, x-1 };
-        int[] horizontalKeyMapTwo = { y, x-2 };
-
         //where to store the candies if it exists in the positions listed above
-        Candy onRightSideOne = null;
-        Candy onRightSideTwo = null;
-        Candy onBelowOne = null;
-        Candy onBelowTwo = null;
-
-        if (y >= 2 && Tiles[verticalKeyMapTwo[0], verticalKeyMapTwo[1]] != null) //if they exists stores the candies along vertically
-        {
-            onBelowOne = Tiles[verticalKeyMapOne[0], verticalKeyMapOne[1]].GetComponentInChildren<Candy>();
-            onBelowTwo = Tiles[verticalKeyMapTwo[0], verticalKeyMapTwo[1]].GetComponentInChildren<Candy>();
-            checkVertical = true;
-        }
-        if (x >= 2 && Tiles[horizontalKeyMapTwo[0], horizontalKeyMapTwo[1]] != null) //if they exists stores the candies along horizontally
-        {
-            onRightSideOne = Tiles[horizontalKeyMapOne[0], horizontalKeyMapOne[1]].GetComponentInChildren<Candy>();
-            onRightSideTwo = Tiles[horizontalKeyMapTwo[0], horizontalKeyMapTwo[1]].GetComponentInChildren<Candy>();
-            checkHorizontal = true;
-        }
+        Candy onRightSideOne = GetCandy(y, x - 1);
+        Candy onRightSideTwo = GetCandy(y, x - 2);
+        Candy onBelowOne = GetCandy(y - 1, x);
+        Candy onBelowTwo = GetCandy(y - 2, x);
 
 
         int notAvailableColor = -1;
 
-        if (checkHorizontal && onRightSideOne.Data.candyColor == onRightSideTwo.Data.candyColor) //check if the colors of the stored candies are equals to the current candy color to analyze (Horizontally)
+        if (onRightSideTwo != null && onRightSideOne.Data.candyColor == onRightSideTwo.Data.candyColor) //check if the colors of the stored candies are equals to the current candy color to analyze (Horizontally)
         {
             notAvailableColor = (int)onRightSideOne.Data.candyColor;
             while (color == notAvailableColor) color = RandomColor();
         }
 
-        if (checkVertical && onBelowOne.Data.candyColor == onBelowTwo.Data.candyColor) //check if the colors of the stored candies are equals to the current candy color to analyze (Vertically)
+        if (onBelowTwo != null && onBelowOne.Data.candyColor == onBelowTwo.Data.candyColor) //check if the colors of the stored candies are equals to the current candy color to analyze (Vertically)
         {
             while (color == (int)onBelowOne.Data.candyColor || color == notAvailableColor) color = RandomColor();
         }
 
         return (CandyColor)color;
     }
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //********************************** STATIC METHODS *****************************************
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    #region STATIC METHODS
 
     /// <summary>
     /// </summary>
@@ -149,13 +134,13 @@ public class GridManager : MonoBehaviour
     public static Candy GetCandy(int row, int column)
     {
         //checks if passed coordinates are valid
-        if (row < 0 || row >= Instance.MaxRow || column < 0 || column >= Instance.MaxColumn)
+        if (row < 0 || row >= m_instance.MaxRow || column < 0 || column >= m_instance.MaxColumn)
         {
             Debug.Log("NOT VALID COORDINATES");
             return null;
         }
 
-        Tile tile = Instance.Tiles[row, column];
+        Tile tile = m_instance.Tiles[row, column];
         return GetCandy(tile);
     }
 
@@ -166,6 +151,12 @@ public class GridManager : MonoBehaviour
     /// <returns>candy in the tile</returns>
     public static Candy GetCandy(Tile tile)
     {
+        if (tile == null)
+        {
+            Debug.Log("NULL TILE PASSED");
+            return null;
+        }
+
         int childCount = tile.transform.childCount;
         Candy candyToReturn = null;
 
@@ -194,20 +185,18 @@ public class GridManager : MonoBehaviour
         return candyToReturn;
     }
 
-
-
     /// <param name="row"></param>
     /// <param name="column"></param>
     /// <returns>the tile in the passed coordinates</returns>
     public static Tile GetTile(int row, int column)
     {
-        if (row < 0 || row >= Instance.MaxRow || column < 0 || column >= Instance.MaxColumn)
+        if (row < 0 || row >= m_instance.MaxRow || column < 0 || column >= m_instance.MaxColumn)
         {
             Debug.Log("NOT VALID COORDINATES");
             return null;
         }
 
-        return Instance.Tiles[row, column];
+        return m_instance.Tiles[row, column];
     }
 
     /// <summary>
@@ -226,7 +215,7 @@ public class GridManager : MonoBehaviour
     /// <param name="parent">The transform of the tile where to spawn the candy</param>
     public static void SpawnNewCandy(Transform parent)
     {
-        Candy candy = Instantiate(Instance.CandyPrefab, parent);
+        Candy candy = Instantiate(m_instance.CandyPrefab, parent);
         CandyColor candyColor = (CandyColor)GridManager.RandomColor();
         candy.Initialize(0, 0, candyColor, candy.CandySprites[(int)candyColor]);
     }
@@ -244,8 +233,14 @@ public class GridManager : MonoBehaviour
         candy1.transform.SetParent(parent0, false);
     }
 
+    #endregion
+
+
 
 }
+
+
+
 
 
 

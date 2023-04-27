@@ -5,6 +5,8 @@ using UnityEngine;
 public class ScoreCalculator : MonoBehaviour
 {
     private Candy m_candy;
+    private GridManager m_gridManager;
+    private RefillManager m_refillManager;
     private List<Candy> m_horizontalTwin;
     private List<Candy> m_verticalTwin;
 
@@ -13,6 +15,8 @@ public class ScoreCalculator : MonoBehaviour
         m_horizontalTwin = new List<Candy>();
         m_verticalTwin = new List<Candy>();
         m_candy = GetComponent<Candy>();
+        m_gridManager = GameManager.Instance.GridManager;
+        m_refillManager = GameManager.Instance.RefillManager;
 
         CalculateScore();
     }
@@ -35,19 +39,19 @@ public class ScoreCalculator : MonoBehaviour
             switch (m_candy.Data.candyColor)
             {
                 case CandyColor.red:
-                    Destroyer.RedCandiesDestroyer += DestoryCandy;
+                    Destroyer.RedCandiesDestroyer += DestroyCandy;
                     break;
                 case CandyColor.blue:
-                    Destroyer.BlueCandiesDestroyer += DestoryCandy;
+                    Destroyer.BlueCandiesDestroyer += DestroyCandy;
                     break;
                 case CandyColor.green:
-                    Destroyer.GreenCandiesDestroyer += DestoryCandy;
+                    Destroyer.GreenCandiesDestroyer += DestroyCandy;
                     break;
                 case CandyColor.yellow:
-                    Destroyer.YellowCandiesDestroyer += DestoryCandy;
+                    Destroyer.YellowCandiesDestroyer += DestroyCandy;
                     break;
                 case CandyColor.purple:
-                    Destroyer.PurpleCandiesDestroyer += DestoryCandy;
+                    Destroyer.PurpleCandiesDestroyer += DestroyCandy;
                     break;
             }
         }
@@ -58,12 +62,12 @@ public class ScoreCalculator : MonoBehaviour
     /// </summary>
     private void UpdateRefillData()
     {
-        int column = m_candy.GetComponentInParent<Tile>().Data.Column;
+        int column = GridManager.GetTile(m_candy).Data.Column;
 
         if (!m_candy.Data.AlreadyAdded)
         {
             m_candy.Data.AlreadyAdded = true;
-            RefillManager.TilesToRefill[column].Add(m_candy.GetComponentInParent<Tile>());
+            m_refillManager.TilesToRefill[column].Add(GridManager.GetTile(m_candy)); 
         }
 
         if (m_candy.Data.Vscore == 2)
@@ -71,13 +75,13 @@ public class ScoreCalculator : MonoBehaviour
             if (!m_verticalTwin[0].Data.AlreadyAdded && m_verticalTwin[0].Data.Vscore == 1)
             {
                 m_verticalTwin[0].Data.AlreadyAdded = true;
-                RefillManager.TilesToRefill[column].Add(m_verticalTwin[0].GetComponentInParent<Tile>());
+                m_refillManager.TilesToRefill[column].Add(GridManager.GetTile(m_verticalTwin[0]));
             }
 
             if (!m_verticalTwin[1].Data.AlreadyAdded && m_verticalTwin[1].Data.Vscore == 1)
             {
                 m_verticalTwin[1].Data.AlreadyAdded = true;
-                RefillManager.TilesToRefill[column].Add(m_verticalTwin[1].GetComponentInParent<Tile>());
+                m_refillManager.TilesToRefill[column].Add(GridManager.GetTile(m_verticalTwin[1]));
             }
 
             return;
@@ -85,18 +89,18 @@ public class ScoreCalculator : MonoBehaviour
 
         if (m_candy.Data.Hscore == 2)
         {
-            int column0 = m_horizontalTwin[0].GetComponentInParent<Tile>().Data.Column;
-            int column1 = m_horizontalTwin[1].GetComponentInParent<Tile>().Data.Column;
+            int column0 = GridManager.GetTile(m_horizontalTwin[0]).Data.Column;
+            int column1 = GridManager.GetTile(m_horizontalTwin[1]).Data.Column;
 
             if (!m_horizontalTwin[0].Data.AlreadyAdded && m_horizontalTwin[0].Data.Hscore == 1)
             {
                 m_horizontalTwin[0].Data.AlreadyAdded = true;
-                RefillManager.TilesToRefill[column0].Add(m_horizontalTwin[0].GetComponentInParent<Tile>());
+                m_refillManager.TilesToRefill[column0].Add(GridManager.GetTile(m_horizontalTwin[0]));
             }
             if (!m_horizontalTwin[1].Data.AlreadyAdded && m_horizontalTwin[1].Data.Hscore == 1)
             {
                 m_horizontalTwin[1].Data.AlreadyAdded = true;
-                RefillManager.TilesToRefill[column1].Add(m_horizontalTwin[1].GetComponentInParent<Tile>());
+                m_refillManager.TilesToRefill[column1].Add(GridManager.GetTile(m_horizontalTwin[1]));
             }
 
             return;
@@ -108,8 +112,8 @@ public class ScoreCalculator : MonoBehaviour
     /// </summary>
     private void CalculateScore()
     {
-        int row = m_candy.GetComponentInParent<Tile>().Data.Row;
-        int column = m_candy.GetComponentInParent<Tile>().Data.Column;
+        int row = GridManager.GetTile(m_candy).Data.Row;
+        int column = GridManager.GetTile(m_candy).Data.Column;
         m_candy.Data.Vscore = 0;
         m_candy.Data.Hscore = 0;
 
@@ -142,9 +146,9 @@ public class ScoreCalculator : MonoBehaviour
     /// <param name="column">column of the current candy</param>
     private void CheckNeighbourUp(int row, int column)
     {
-        if (row == GridManager.Instance.MaxRow - 1) return;
+        if (row == m_gridManager.MaxRow - 1) return;
 
-        Candy neighbour = GridManager.Instance.Tiles[row + 1, column].GetComponentInChildren<Candy>();
+        Candy neighbour = GridManager.GetCandy(m_gridManager.Tiles[row + 1, column]);
 
         if (neighbour != null) UpdateScores(neighbour, true);
     }
@@ -158,7 +162,7 @@ public class ScoreCalculator : MonoBehaviour
     {
         if (row == 0) return;
 
-        Candy neighbour = GridManager.Instance.Tiles[row - 1, column].GetComponentInChildren<Candy>();
+        Candy neighbour = GridManager.GetCandy(m_gridManager.Tiles[row - 1, column]);
 
         if (neighbour != null) UpdateScores(neighbour, true);
     }
@@ -170,9 +174,9 @@ public class ScoreCalculator : MonoBehaviour
     /// <param name="column">column of the current candy</param>
     private void CheckNeighbourRight(int row, int column)
     {
-        if (column == GridManager.Instance.MaxColumn - 1) return;
+        if (column == m_gridManager.MaxColumn - 1) return;
 
-        Candy neighbour = GridManager.Instance.Tiles[row, column + 1].GetComponentInChildren<Candy>();
+        Candy neighbour = GridManager.GetCandy(m_gridManager.Tiles[row, column + 1]);
 
         if (neighbour != null) UpdateScores(neighbour, false);
     }
@@ -186,7 +190,7 @@ public class ScoreCalculator : MonoBehaviour
     {
         if (column == 0) return;
 
-        Candy neighbour = GridManager.Instance.Tiles[row, column - 1].GetComponentInChildren<Candy>();
+        Candy neighbour = GridManager.GetCandy(m_gridManager.Tiles[row, column - 1]);
 
         if (neighbour != null) UpdateScores(neighbour, false);
     }
@@ -223,7 +227,7 @@ public class ScoreCalculator : MonoBehaviour
     /// <summary>
     /// Destroys the current candy and its twins
     /// </summary>
-    public void DestoryCandy()
+    public void DestroyCandy()
     {
         if (m_candy.Data.Hscore >= 2)
         {

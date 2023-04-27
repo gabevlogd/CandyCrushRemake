@@ -1921,7 +1921,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.649994, y: 121.91992}
+  m_AnchoredPosition: {x: -6.6499634, y: 121.91992}
   m_SizeDelta: {x: -125.52, y: -244.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1278110540
@@ -2145,7 +2145,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.649994, y: -121.930176}
+  m_AnchoredPosition: {x: -6.6499634, y: -121.930176}
   m_SizeDelta: {x: -125.52, y: -244.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1497158659
@@ -2324,6 +2324,7 @@ MonoBehaviour:
   CandyPrefab: {fileID: 3570779741632838798, guid: e4e9d41e398d9b240912c0b5ffaf07fe, type: 3}
   MaxRow: 7
   MaxColumn: 7
+  PressedTiles: []
 --- !u!114 &1634963482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2927,6 +2928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ad689b6886d0645915fa2344d17aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridManager: {fileID: 1634963480}
   Destroyer: {fileID: 1709530030}
   RefillManager: {fileID: 253512166}
   PostRefillCombosManager: {fileID: 1844579290}

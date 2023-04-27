@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public StateBase<GameState> PreviousState { get => m_previuosState; set => m_previuosState = value; }
 
     public Dictionary<GameState, StateBase<GameState>> GameStates;
+    public GridManager GridManager;
     public Destroyer Destroyer;
     public RefillManager RefillManager;
     public PostRefillCombosManager PostRefillCombosManager;
@@ -32,9 +33,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         GameStates = new Dictionary<GameState, StateBase<GameState>>();
-        GameStates.Add(GameState.WaitMove, new WaitMoveState());
-        GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(Destroyer));
-        GameStates.Add(GameState.RefillGrid, new RefillGridState(RefillManager));
+        GameStates.Add(GameState.WaitMove, new WaitMoveState(GridManager));
+        GameStates.Add(GameState.ComputeCombos, new ComputeCombosState(Destroyer, GridManager));
+        GameStates.Add(GameState.RefillGrid, new RefillGridState(RefillManager, GridManager));
         GameStates.Add(GameState.PostRefill, new PostRefillState(PostRefillCombosManager));
         GameStates.Add(GameState.GameOver, new GameOverState(WinTab, LoseTab));
 

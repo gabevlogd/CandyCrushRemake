@@ -10,7 +10,7 @@ public class GravityComponent : MonoBehaviour
     private void OnEnable()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
-        m_newParent = GetComponentInParent<Tile>();
+        m_newParent = GridManager.GetTile(GetComponent<Candy>());
         m_rigidbody.bodyType = RigidbodyType2D.Dynamic;
         m_rigidbody.gravityScale = 1;
     }
